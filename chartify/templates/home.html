@@ -1,0 +1,352 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="dropdown-container">
+        <select id='chooseDecade' name='chooseDecade' class="form-select" aria-label="Default select example"
+            onchange="chooseYear()">
+            <!-- <option value='1950' selected>1950</option> -->
+        </select>
+
+        <select id='chooseYear' name='chooseYear' class="form-select" aria-label="Default select example"
+            onchange="chooseWeek()">
+            <!-- <option value=1967 selected></option> -->
+        </select>
+
+        <select id='chooseWeek' name='chooseWeek' class="form-select" aria-label="Default select example"
+            onchange="chartDetail()">
+            <!-- <option value=19670101 selected>Week 01 - Jan 01</option> -->
+        </select>
+        <p><b>or</b></p>
+        <button id='randomizeBtn' type="button" class='btn btn-primary' onclick="getRandomChart()">Randomize
+        </button>
+    </div>
+
+    <div class="button-container">
+        <button id='createPL' type="button" class='btn btn-primary'>Add
+            Playlist To
+            Spotify
+        </button>
+
+        <!-- <div id="myModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <img class='loader_img' src="img\spinner.gif">
+                <p>Due to naming conflicts, the following songs were not added to the playlist: </p>
+            </div>
+        </div> -->
+
+        <div id="editPlaylistName" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="input-group mb-3">
+                    <input type="text" id='nameInput' class="form-control" placeholder="" aria-label=""
+                        aria-describedby="basic-addon1">
+                    <div class="input-group-prepend">
+                        <button id='editNameBtn' class="btn btn-outline-secondary" type="button">Submit</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div id='showChart' name='showChart'></div>
+    <br />
+
+    <div class=" button-container">
+        <button id='createPL' type="button" class='btn btn-primary'>Add
+            Playlist To
+            Spotify</button>
+    </div>
+    <!-- <button id="myBtn">Open Modal</button> -->
+</div>
+
+<script>
+    var c = function () {
+        console.log.apply(console, arguments);
+    }
+    window.onload = function () {
+        getRandomChart();
+        chooseDecade();
+    }
+    // GLOBAL VARS
+    var chart_data = {}, dump = {};
+    var pl_name = '';
+    var new_name = '';
+
+    createPL = document.getElementById('createPL');
+    createPL.addEventListener('click', editPlaylistName);
+    // createPL.addEventListener('click', addPlaylistToApp);
+
+    function addPlaylistToApp2(chart, new_name) {
+        // c(chart.length)
+        c(new_name)
+    }
+
+    // 6. Add Playlist to Spotify
+    function addPlaylistToApp() {
+        chart_data = chart_data.filter(elm => elm);
+        $.ajax({
+            type: 'GET',
+            data: {
+                // 'chart_data': chart_data,
+                'chart_data': JSON.stringify(chart_data),
+                'pl_name': pl_name,
+            },
+            url: "{% url 'add_playlist_to_app' %}",
+            success: function (data) {
+                // showSkippedSongs(data)
+                alert('Success')
+            },
+            error: function (response) {
+                alert('Error')
+            }
+        });
+    }
+
+    // 5. Change default name
+    function editPlaylistName() {
+        var modal = document.getElementById("editPlaylistName");
+        modal.style.display = "block";
+        // var btn = document.getElementById("createPL");
+        // btn.addEventListener("click", e => {
+        //     console.log('clicked Add Playlist Button');
+        //     modal.style.display = "block";
+        // });
+
+        var input = document.getElementById('nameInput');
+        input.placeholder = pl_name;
+        // input.value = pl_name;
+        input.setSelectionRange(0, 0);
+        input.focus();
+        c('NAME: ' + pl_name);
+        // input.select();
+        // input.onkeypress = function (e) {
+        //     c(e.keyCode);
+        //     // input.value = '';
+        // }
+        // input.onkeydown = function () {
+        //     var key = event.keyCode || event.Charcode;
+        //     if (key == 8 || key == 46) {
+        //         input.value = '';
+        //     }
+        // }
+        // nameInput.addEventListener("keypress", e => {
+        //     if (e.key === "Enter") callback();
+        // });
+
+        var editNameBtn = document.getElementById('editNameBtn');
+        editNameBtn.addEventListener("click", e => {
+            new_name = document.getElementById('nameInput').value;
+            // c('newname length is  ' + new_name.length);
+            // c(pl_name)
+            if (new_name.length == 0) {
+                new_name = pl_name;
+            }
+            addPlaylistToApp(chart_data, new_name);
+            //     // input.placeholder = pl_name;
+            //     // nameInput.value = pl_name;
+            //     // input.value = '';
+            //     modal.style.display = "none";
+        });
+
+        // clicking X to close
+        var span = document.getElementsByClassName("close")[0];
+        span.onclick = function () {
+            modal.style.display = "none";
+
+        }
+        // When the user clicks anywhere outside of the modal, close it
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    }
+
+    // 4. Deselect unwanted tracks
+    function deSelectTracks() {
+        document.querySelectorAll(".track-artist-container").forEach(item => {
+            item.addEventListener('click', event => {
+                let value = Number(item.getAttribute('value')) - 1;
+                if (value in chart_data) {
+                    dump[value] = chart_data[value];
+                    delete (chart_data[value]);
+                    console.log('Song removed. # of songs in dict: ', Object.keys(chart_data).length);
+                    c(chart_data)
+                } else {
+                    chart_data[value] = dump[value];
+                    delete (dump[value]);
+                    console.log('Song added. # of songs in dict: ', Object.keys(chart_data).length);
+                    c(chart_data)
+                }
+                console.log('clicked value: ', value);
+                const style = getComputedStyle(item);
+                const bgColor = style.backgroundColor;
+                if (bgColor === 'rgb(67, 67, 67)') {
+                    item.style.backgroundColor = 'rgb(255, 0, 0)';
+                    // item.style.backgroundColor = 'rgb(255, 102, 102)';
+                }
+                else {
+                    item.style.backgroundColor = 'rgb(67, 67, 67)';
+                }
+            })
+        })
+    }
+
+
+    // 3. Render chart
+    function chartDetail() {
+        var weekChosen = document.querySelector('#chooseWeek');
+        let chart_id = weekChosen.value;
+        // c('ChartID: ', chart_id);
+        //Next 3 lines recreate the original default playlist name
+        let text = weekChosen.options[weekChosen.selectedIndex].text;
+        let extractYear = chart_id.slice(0, 4)
+        pl_name = extractYear + ' - ' + text;
+        // c('Plname: ', pl_name)
+        $.ajax({
+            url: "{% url 'chart_detail' %}",
+            type: 'GET',
+            data: { 'chart_id': chart_id },
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                chart_data = data;
+                let html_data = '';
+                for (const [key, value] of Object.entries(data)) {
+                    let rank = (value['_id']),
+                        // let _id = `${key}`,
+                        title = (value['title']),
+                        artist = (value['artist']),
+                        spot_id = (value['spot_id']),
+                        img_url = (value['img_url']);
+                    html_data += `<div class="track-artist-container" value="${rank}"><img class="img_url"
+                                        src="${img_url}" onError="this.onerror=null;this.src='/img/album.png';"</img>
+                                   <div class="track"><b>${title} - (${rank})</b><br/>${artist}</div>
+                             </div>`
+                }
+                $("#showChart").html(html_data);
+                deSelectTracks();
+            },
+        });
+    }
+
+    // 2. Show random chart
+    function showRandomChart(plid, decade, year, song_count) {
+        $('#chooseDecade').val(decade).change();
+        $('#chooseYear').val(year).change();
+        setTimeout(function () { $('#chooseWeek').val(plid).change() }, 100);
+    }
+
+    // 1. Fetch random chart from db    
+    function getRandomChart() {
+        let plid = '';
+        $.ajax({
+            url: "{% url 'random_chart' %}",
+            type: 'GET',
+            data: { 'plid': plid },
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                plid = data[0];
+                decade = data[1];
+                year = data[2];
+                song_count = data[3];
+                showRandomChart(plid, decade, year, song_count);
+            },
+            error: function (response) {
+                alert("Error getting data")
+            },
+        });
+    }
+    //dropdowns
+    function chooseWeek() {
+        let year = document.querySelector('#chooseYear').value;
+        $.ajax({
+            url: "{% url 'show_weeks' %}",
+            type: 'GET',
+            data: { 'year': year },
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                let html_data = '';
+                for (const weekly_chart of data) {
+                    index = data.indexOf(weekly_chart) + 1;
+                    index = index.toString().padStart(2, '0');
+                    day = weekly_chart.slice(6,)
+                    month = getMonthName(weekly_chart.slice(4, 6))
+                    // week = weekYear(weekly_chart)
+                    html_data += `<option
+                        value="${weekly_chart}">Week ${index} - ${month} ${day} </option>`
+                }
+                first_chart = data[0]; // get first chart in array
+                $("#chooseWeek").html(html_data);
+                // $("#chooseWeek").val(first_chart).change();
+            }
+        });
+    }
+
+    // //dropdowns
+    function chooseYear() {
+        let decade = document.querySelector('#chooseDecade').value,
+            select = document.querySelector('#chooseYear');
+        select.options.length = 0;
+        decade = parseInt(decade);
+        var yearsArray = new Array();
+
+        for (var i = 0; i < 10; i++) {
+            yearsArray.push(decade)
+            decade = decade + 1;
+        }
+
+        for (var i = 0; i < yearsArray.length; i++) {
+            var option = document.createElement('option');
+            option.innerHTML = yearsArray[i];
+            option.value = yearsArray[i];
+            if (option.value < 1952 || option.value > 2023) {
+                option.remove()
+            }
+            else {
+                select.appendChild(option);
+            }
+        }
+    }
+
+    function chooseDecade() {
+        myArray = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
+        const decade = document.querySelector('#chooseYear').value,
+            select = document.querySelector('#chooseDecade');
+        // var decade = $('#chooseDecade').val(),
+        // select = document.getElementById('chooseDecade');
+
+        for (var i = 0; i < myArray.length; i++) {
+            var option = document.createElement('option');
+            option.innerHTML = myArray[i] + "'s";
+            option.value = myArray[i];
+            select.appendChild(option);
+        }
+    }
+
+    function getMonthName(monthNumber) {
+        const date = new Date();
+        date.setMonth(monthNumber - 1);
+        return date.toLocaleString('en-US', { month: 'short' });
+    }
+
+    function weekYear(date) {
+        yyyy = date.slice(0, 4)
+        mm = date.slice(4, 6)
+        dd = date.slice(6,)
+        let fdate = (yyyy + '-' + mm + '-' + dd)
+        fdate = new Date(fdate);
+        let year = new Date(fdate.getFullYear(), 0, 1);
+        let days = Math.floor((fdate - year) / (24 * 60 * 60 * 1000));
+        let week = Math.ceil((fdate.getDay() + 1 + days) / 7);
+        return week;
+    }
+
+</script>
+
+{% endblock %}
