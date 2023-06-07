@@ -6,82 +6,76 @@ import os, requests, re, django, pickle, sys
 sys.path.append("/path/to/chartz_project")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "chartz_project.settings")
 django.setup()
-# from pages.models import Track, Playlist
 from chartify.login import app_login
-from pymongo import MongoClient
+from chartify.models import Playlist, Track
 
 
 def main():
-    # cwd = os.getcwd()
-    # path = cwd + "\charts"
-    # path = "C:\\Users\\jredd\\PycharmProjects\\spotifyapp\\charts"
-    path = "C:\\projects\\spot\\all_pkl_new"
-    tpath = "C:\\projects\\spot\\all_txt"
-    # dne_path = "C:\\projects\\spot\\dne"
-    fdates = ["20230507", "20230514", "20230521"]
-    # fdate = "20230507"
+    _path = "C:\\Users\\jredd\\PycharmProjects\\mongo\\charts\\pkl_dest_test"
+
+    # fdate = ["20230402", "20230409", "20230416", "20230430"]
+
+    fdate = "20230521"
+    # fn = fdate
 
     #### PRODUCTION CODE STARTS HERE ####
 
     # fdate = get_date_today()
-    for fdate in fdates:
-        current_chart_url = create_url_from_date(fdate)
-        chart = scrape_weekly_chart(current_chart_url)
-        chart, do_not_exist = get_track_ids_from_spotify(chart)
-        add_chart_to_mongo(chart, collection=fdate)
+    current_chart_url = create_url_from_date(fdate)
+    chart = scrape_weekly_chart(fdate, current_chart_url)
+    chart, do_not_exist = get_track_ids_from_spotify(chart)
+    add_pl_and_tracks_to_db(chart, fdate)
+    # pickle_dump(chart, _path, "cjart_w_ids")
+    # write_to_txt_file(chart, _path, "cjart_w_ids")
 
     # chart, fdate = pickle_load(path, fdate)
     # pickle_dump(chart, path, fdate)
     # write_to_txt_file(chart, tpath, fdate)
-    # add_pl_and_tracks_to_db(chart, fn)
+    # add_chart_to_mongo(chart, collection=fdate)
     # data.sort(key=lambda a: a[2])
 
 
-def add_chart_to_mongo(chart_data, collection):
-    lst = []
-    client = MongoClient("mongodb://localhost:27017/")
-    dbname = client["charts"]
-    # print(chart_data)
-    for entry in chart_data:
-        entry = {
-            "_id": entry[2],
-            "title": entry[0],
-            "artist": entry[1],
-            "spot_id": entry[4],
-            "img_url": entry[3],
-        }
-        lst.append(entry)
-    print(lst)
-    col = dbname[collection]
-    col.insert_many(lst)
+def pickled_charts_to_db(pickle_path):
+    for file in os.listdir(pickle_path):
+        fn, ext = os.path.splitext(file)
+        chart, fn = pickle_load(pickle_path, fn)
+        add_pl_and_tracks_to_db(chart, fn)
 
 
-# def add_pl_and_tracks_to_db(chart, fn):
-#     added, not_added = [], []
-#     plname = datetime.strptime(fn, "%Y%m%d").strftime("%Y - wk %U - %b %d")
-#     # create playlist in db, name format 19600104
-#     if not Playlist.objects.filter(playlist_id=fn).exists():
-#         playlist, created = Playlist.objects.get_or_create(playlist_id=fn, name=plname)
-#         print("Playlist {} added to DB".format(plname))
-#     for entry in chart:
-#         try:
-#             song_name, artist, img_url, spot_id = entry[0], entry[1], entry[3], entry[4]
-#             rank = entry[2]
-#             track, created = Track.objects.get_or_create(
-#                 name=song_name, artist=artist, img_url=img_url, spot_id=spot_id
-#             )
-#             playlist.track.add(track)
-#             added.append(track)
-#         except:
-#             not_added.append(song_name)
-#             print(
-#                 "Song not added to playlist: {} - {}  {}".format(
-#                     song_name, artist, rank
-#                 )
-#             )
-#     print("songs added: ", len(added))
-#     print("Songs not added: ", len(not_added))
-#     return added, not_added
+def add_pl_and_tracks_to_db(chart, fn):
+    added, not_added = [], []
+    plname = datetime.strptime(fn, "%Y%m%d").strftime("%Y - Week %U - %b %d")
+    # create playlist in db, name format 19600104
+    if not Playlist.objects.filter(playlist_id=fn).exists():
+        playlist = Playlist.objects.create(playlist_id=fn, name=plname)
+        print(playlist)
+    else:
+        pass
+    for entry in chart:
+        try:
+            track_id, name, artist, img_url, spot_id = (
+                entry[0],
+                entry[1],
+                entry[2],
+                entry[4],
+                entry[3],
+            )
+            track = Track.objects.create(
+                track_id=track_id,
+                name=name,
+                artist=artist,
+                spot_id=spot_id,
+                img_url=img_url,
+            )
+            playlist.track.add(track)
+            added.append(track)
+        except:
+            not_added.append(entry)
+            # print("Song not added to playlist: {} - {}".format(name, artist))
+
+    print("songs added: ", len(added))
+    [print(song) for song in not_added]
+    return added, not_added
 
 
 def create_blank_plist(sp, user_id, pl_name):
@@ -98,36 +92,26 @@ def populate_playlist(sp, user_id, pl_id, track_ids):
     sp.user_playlist_add_tracks(user_id, pl_id, track_ids)
 
 
-# def check_if_track_in_db(chart):
-#     new_chart = []
-#     for entry in chart:
-#         print("{} {}".format(entry[0], entry[1]))
-#         if not Track.objects.filter(name=entry[0]).filter(artist=entry[1]):
-#             new_chart.append(entry)
-#     print(new_chart)
-#     return new_chart
-
-
 def get_track_ids_from_spotify(chart):
     tracks_w_ids, do_not_exist = [], []
     sp = app_login()
     for entry in chart:
-        title, artist = entry[0], entry[1]
+        title, artist = entry[1], entry[2]
         search_query = f"{title} {artist}"
         result = sp.search(q=search_query, limit=5, type="track")
         if result["tracks"]["total"] == 0:
             do_not_exist.append(entry)
             continue
         else:
-            track_id = result["tracks"]["items"][0]["id"]
-            print(track_id)
-            song_w_id = (*entry, track_id)
+            spot_id = result["tracks"]["items"][0]["id"]
+            # print(spot_id)
+            song_w_id = (*entry, spot_id)
             print(song_w_id)
             tracks_w_ids.append(song_w_id)
     return tracks_w_ids, do_not_exist
 
 
-def scrape_weekly_chart(url):
+def scrape_weekly_chart(fdate, url):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"
     }
@@ -136,12 +120,26 @@ def scrape_weekly_chart(url):
 
     titles = [title.text.strip() for title in soup.find_all("div", class_="title")]
     artists = [artist.text.strip() for artist in soup.find_all("div", class_="artist")]
-    imgs = [img["src"] for img in soup.select(".chart img")]
+    img_urls = [img["src"] for img in soup.select(".chart img")]
+    imgs = [img_url.replace("/img/60x60.gif", "/img/album.png") for img_url in img_urls]
     ranks = [i for i in range(1, len(titles) + 1)]
 
-    chart = [(titles[i], artists[i], ranks[i], imgs[i]) for i in range(len(titles))]
+    track_ids = convert_rank_to_track_id(fdate, ranks)
+    chart = [(track_ids[i], titles[i], artists[i], imgs[i]) for i in range(len(titles))]
     res.close()
     return chart
+
+
+def convert_rank_to_track_id(fdate, ranks):
+    track_ids = []
+    for rank in ranks:
+        if rank < 10:
+            rank = "".join(["00", str(rank)])
+        elif rank < 100:
+            rank = "".join(["0", str(rank)])
+        track_id = "".join([fdate, str(rank)])
+        track_ids.append(track_id)
+    return track_ids
 
 
 def get_date_from_url(url):
@@ -164,7 +162,7 @@ def pickle_load(path, filename):
     # filename = os.path.basename(os.path.normpath(filename))
 
     with open(complete_path, "rb") as f:
-        print("Unpickling / opening data: ", complete_path)
+        # print("Unpickling / opening data: ", complete_path)
         udata = pickle.load(f)
     return udata, fn
 
@@ -217,9 +215,6 @@ def create_url_from_date(today):
 
 
 if __name__ == "__main__":
-    main()
-    # fdate = "20230409"
-    # path = "C:\\projects\\spot\\charts"
-    # udata, fn = pickle_load(path, fdate)
-    # print(udata)
-    # add_pl_and_tracks_to_db(udata, fn)
+    # main()
+    _path = "C:\\Users\\jredd\\PycharmProjects\\mongo\\charts\\pkl_dest"
+    pickled_charts_to_db(_path)

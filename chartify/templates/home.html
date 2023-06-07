@@ -109,46 +109,18 @@
     function editPlaylistName() {
         var modal = document.getElementById("editPlaylistName");
         modal.style.display = "block";
-        // var btn = document.getElementById("createPL");
-        // btn.addEventListener("click", e => {
-        //     console.log('clicked Add Playlist Button');
-        //     modal.style.display = "block";
-        // });
-
         var input = document.getElementById('nameInput');
         input.placeholder = pl_name;
-        // input.value = pl_name;
         input.setSelectionRange(0, 0);
         input.focus();
-        c('NAME: ' + pl_name);
-        // input.select();
-        // input.onkeypress = function (e) {
-        //     c(e.keyCode);
-        //     // input.value = '';
-        // }
-        // input.onkeydown = function () {
-        //     var key = event.keyCode || event.Charcode;
-        //     if (key == 8 || key == 46) {
-        //         input.value = '';
-        //     }
-        // }
-        // nameInput.addEventListener("keypress", e => {
-        //     if (e.key === "Enter") callback();
-        // });
 
         var editNameBtn = document.getElementById('editNameBtn');
         editNameBtn.addEventListener("click", e => {
             new_name = document.getElementById('nameInput').value;
-            // c('newname length is  ' + new_name.length);
-            // c(pl_name)
             if (new_name.length == 0) {
                 new_name = pl_name;
             }
             addPlaylistToApp(chart_data, new_name);
-            //     // input.placeholder = pl_name;
-            //     // nameInput.value = pl_name;
-            //     // input.value = '';
-            //     modal.style.display = "none";
         });
 
         // clicking X to close
@@ -167,9 +139,12 @@
 
     // 4. Deselect unwanted tracks
     function deSelectTracks() {
+        // c(chart_data)
         document.querySelectorAll(".track-artist-container").forEach(item => {
             item.addEventListener('click', event => {
-                let value = Number(item.getAttribute('value')) - 1;
+                // let value = item.getAttribute('value');
+
+                let value = Number(item.getAttribute('value') - 1);
                 if (value in chart_data) {
                     dump[value] = chart_data[value];
                     delete (chart_data[value]);
@@ -195,36 +170,34 @@
         })
     }
 
-
     // 3. Render chart
     function chartDetail() {
-        var weekChosen = document.querySelector('#chooseWeek');
+        var song_list = [];
+        let weekChosen = document.querySelector('#chooseWeek');
         let chart_id = weekChosen.value;
-        // c('ChartID: ', chart_id);
         //Next 3 lines recreate the original default playlist name
         let text = weekChosen.options[weekChosen.selectedIndex].text;
         let extractYear = chart_id.slice(0, 4)
         pl_name = extractYear + ' - ' + text;
-        // c('Plname: ', pl_name)
         $.ajax({
             url: "{% url 'chart_detail' %}",
             type: 'GET',
             data: { 'chart_id': chart_id },
             dataType: 'json',
-            cache: false,
             success: function (data) {
                 chart_data = data;
+                c(chart_data)
                 let html_data = '';
                 for (const [key, value] of Object.entries(data)) {
-                    let rank = (value['_id']),
-                        // let _id = `${key}`,
-                        title = (value['title']),
+                    let track_id = (value['track_id']),
+                        rank = (parseInt(value['track_id'].slice(8,), 10)),
+                        name = (value['name']),
                         artist = (value['artist']),
                         spot_id = (value['spot_id']),
                         img_url = (value['img_url']);
                     html_data += `<div class="track-artist-container" value="${rank}"><img class="img_url"
                                         src="${img_url}" onError="this.onerror=null;this.src='/img/album.png';"</img>
-                                   <div class="track"><b>${title} - (${rank})</b><br/>${artist}</div>
+                                   <div class="track"><b>${name} - (${rank})</b><br/>${artist}</div>
                              </div>`
                 }
                 $("#showChart").html(html_data);
@@ -250,11 +223,12 @@
             dataType: 'json',
             cache: false,
             success: function (data) {
+                c(data)
                 plid = data[0];
                 decade = data[1];
                 year = data[2];
-                song_count = data[3];
-                showRandomChart(plid, decade, year, song_count);
+                // song_count = data[3];
+                showRandomChart(plid, decade, year);
             },
             error: function (response) {
                 alert("Error getting data")
@@ -263,28 +237,23 @@
     }
     //dropdowns
     function chooseWeek() {
-        let year = document.querySelector('#chooseYear').value;
+        var year = $('#chooseYear').val();
         $.ajax({
             url: "{% url 'show_weeks' %}",
             type: 'GET',
             data: { 'year': year },
             dataType: 'json',
-            cache: false,
             success: function (data) {
                 let html_data = '';
-                for (const weekly_chart of data) {
-                    index = data.indexOf(weekly_chart) + 1;
-                    index = index.toString().padStart(2, '0');
-                    day = weekly_chart.slice(6,)
-                    month = getMonthName(weekly_chart.slice(4, 6))
-                    // week = weekYear(weekly_chart)
+                data.forEach(function (data) {
                     html_data += `<option
-                        value="${weekly_chart}">Week ${index} - ${month} ${day} </option>`
-                }
-                first_chart = data[0]; // get first chart in array
+        value="${data.playlist_id}">${data.name.slice(7,)}</option>`
+                });
                 $("#chooseWeek").html(html_data);
-                // $("#chooseWeek").val(first_chart).change();
-            }
+            },
+            error: function (response) {
+                alert("Error getting data")
+            },
         });
     }
 
