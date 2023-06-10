@@ -12,6 +12,12 @@ p {
     height: 0px;
 }
 
+.customPLname {
+    color: white;
+    /* padding: 1px; */
+    margin-bottom: 35px;
+}
+
 /*  DROPDOWNS ********************* */
 .form-select {
     background-color: #ffe0b3;
@@ -89,10 +95,21 @@ button {
     background-color: black;
 }
 
+.text {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* border: 2px solid red; */
+    height: 40px;
+    padding: 10px;
+    margin-bottom: 20px;
+
+}
 
 
 /*  DIVS ********************* */
 .container {
+    border: 2px solid green;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -108,12 +125,15 @@ button {
     background-color: #ffc266;
     border: 1px solid black;
     width: 300px;
+    /* width: auto; */
     margin-bottom: 5px;
-    animation: colorChange 4s infinite;
+    /* animation: colorChange 4s infinite; */
 }
 
 #showChart {
     display: grid;
+    /* display: flex;
+    flex-direction: column; */
     justify-content: center;
     margin-top: 5px;
     border: 1px solid #717171;
@@ -123,6 +143,7 @@ button {
 
 
 .dropdown-container {
+    /* border: 2px solid orange; */
     justify-content: center;
     gap: 1rem;
     flex-direction: column;
@@ -144,9 +165,11 @@ button {
     margin-top: 5px;
 }
 
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width: 770px) {
     #showChart {
         display: grid;
+        /* display: flex; */
+        /* flex-direction: column; */
         grid-template-columns: 330px 330px;
     }
 
@@ -164,7 +187,13 @@ button {
 @media only screen and (min-width: 1024px) {
     #showChart {
         display: grid;
+        /* display: flex; */
         grid-template-columns: 330px 330px 330px;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
     }
 
     .dropdown-container {
@@ -283,7 +312,7 @@ button {
 
 .close:hover,
 .close:focus {
-    color: black;
+    color: white;
     text-decoration: none;
     cursor: pointer;
 }

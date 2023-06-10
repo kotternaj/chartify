@@ -2,6 +2,9 @@
 {% block content %}
 
 <div class="container">
+    <div class="text">
+        <p class="ptext">1. Choose a UK chart from the dropdowns:</p>
+    </div>
     <div class="dropdown-container">
         <select id='chooseDecade' name='chooseDecade' class="form-select" aria-label="Default select example"
             onchange="chooseYear()">
@@ -28,9 +31,11 @@
             Spotify
         </button>
 
+
         <div id="editPlaylistName" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
+                <p class="customPLname">3. Customize playlist name or use default shown</p>
                 <div class="input-group mb-3">
                     <input type="text" id='nameInput' class="form-control" placeholder="" aria-label=""
                         aria-describedby="basic-addon1">
@@ -42,12 +47,15 @@
             </div>
         </div>
     </div>
-    <br />
+    <div class="text">
+        <p class="ptext">2. Select any songs you want <i>excluded</i> from the playlist:</p>
+    </div>
+    <!-- <br /> -->
     <div id='showChart' name='showChart'></div>
     <br />
 
     <div class=" button-container">
-        <button id='createPL' type="button" class='btn btn-primary'>Add
+        <button id='createPL2' type="button" class='btn btn-primary'>Add
             Playlist To
             Spotify</button>
     </div>
@@ -69,6 +77,8 @@
 
     createPL = document.getElementById('createPL');
     createPL.addEventListener('click', editPlaylistName);
+    createPL2 = document.getElementById('createPL2');
+    createPL2.addEventListener('click', editPlaylistName);
     // createPL.addEventListener('click', addPlaylistToApp);
 
     function addPlaylistToApp2(chart, new_name) {
@@ -78,7 +88,7 @@
 
     // 6. Add Playlist to Spotify
     function addPlaylistToApp() {
-        chart_data = chart_data.filter(elm => elm);
+        // chart_data = chart_data.filter(elm => elm);
         $.ajax({
             type: 'GET',
             data: {
@@ -141,12 +151,12 @@
                     dump[value] = chart_data[value];
                     delete (chart_data[value]);
                     console.log('Song removed. # of songs in dict: ', Object.keys(chart_data).length);
-                    c(chart_data)
+                    // c(chart_data)
                 } else {
                     chart_data[value] = dump[value];
                     delete (dump[value]);
                     console.log('Song added. # of songs in dict: ', Object.keys(chart_data).length);
-                    c(chart_data)
+                    // c(chart_data)
                 }
                 console.log('clicked value: ', value);
                 const style = getComputedStyle(item);
@@ -178,7 +188,7 @@
             dataType: 'json',
             success: function (data) {
                 chart_data = data;
-                c(chart_data)
+                // c(chart_data)
                 let html_data = '';
                 for (const [key, value] of Object.entries(data)) {
                     let track_id = (value['track_id']),
@@ -215,7 +225,7 @@
             dataType: 'json',
             cache: false,
             success: function (data) {
-                c(data)
+                // c(data)
                 plid = data[0];
                 decade = data[1];
                 year = data[2];
@@ -253,8 +263,9 @@
     function chooseYear() {
         let decade = document.querySelector('#chooseDecade').value,
             select = document.querySelector('#chooseYear');
-        select.options.length = 0;
+        decadeChoice = parseInt(decade);
         decade = parseInt(decade);
+        select.options.length = 0;
         var yearsArray = new Array();
         for (var i = 0; i < 10; i++) {
             yearsArray.push(decade)
@@ -271,17 +282,25 @@
                 select.appendChild(option);
             }
         }
+        if (decadeChoice == 1950) {
+            year = yearsArray[2]
+        }
+        else {
+            year = yearsArray[0]
+        }
+
+        $('#chooseYear').val(year).change();
+
     }
 
     function chooseDecade() {
-        myArray = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
-        const decade = document.querySelector('#chooseYear').value,
+        decades = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
+        let decade = document.querySelector('#chooseYear').value,
             select = document.querySelector('#chooseDecade');
-
-        for (var i = 0; i < myArray.length; i++) {
+        for (var i = 0; i < decades.length; i++) {
             var option = document.createElement('option');
-            option.innerHTML = myArray[i] + "'s";
-            option.value = myArray[i];
+            option.innerHTML = decades[i] + "'s";
+            option.value = decades[i];
             select.appendChild(option);
         }
     }

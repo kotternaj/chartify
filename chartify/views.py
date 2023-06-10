@@ -61,10 +61,12 @@ def show_weeks(request):
     if request.method == "GET":
         year = request.GET["year"]
         try:
-            playlists = Playlist.objects.filter(playlist_id__contains=year)
+            playlists = Playlist.objects.filter(playlist_id__startswith=year)
+
         except Exception:
-            data["error_message"] = "error"
-            return JsonResponse(data)
+            print("Error occured")
+            # data["error_message"] = "error"
+            # return JsonResponse(data)
         return JsonResponse(list(playlists.values("playlist_id", "name")), safe=False)
 
 
