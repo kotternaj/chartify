@@ -20,7 +20,7 @@ p {
 
 /*  DROPDOWNS ********************* */
 .form-select {
-    background-color: #ffe0b3;
+    /* background-color: #ffe0b3; */
     border-radius: 20px;
     width: 120px;
     transition: background-color 0.5s ease-in-out;
@@ -40,26 +40,6 @@ p {
     margin-left: 10px;
     width: 100px;
 }
-
-/* .caret !important {
-    color: white;
-} */
-
-/* Caret color */
-/* #chooseDecade > .dropdown-toggle .caret {
-    color: red;
-    border-bottom-color: #ffffff;
-    border-top-color: #ffffff;
-  }
-  
-  .caret {
-    border-top: 4px solid red;
-  }
-  
-  a span.caret {
-    color: red;
-  } */
-
 
 button {
     margin: 5px;
@@ -97,15 +77,16 @@ button {
 
 .text {
     display: flex;
+    font-size: 13px;
     justify-content: center;
     align-items: center;
     /* border: 2px solid red; */
     height: 40px;
     padding: 10px;
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
+    font-style: italic;
 
 }
-
 
 /*  DIVS ********************* */
 .container {
@@ -115,8 +96,7 @@ button {
     justify-content: center;
 }
 
-.track-artist-container,
-.not-found {
+.track-artist-container {
     display: flex;
     text-align: left;
     align-items: center;
@@ -124,9 +104,11 @@ button {
     border-radius: 50px;
     background-color: #ffc266;
     border: 1px solid black;
-    width: 300px;
+    /* width: 300px; */
     /* width: auto; */
-    margin-bottom: 5px;
+    margin-left: 3px;
+    margin-bottom: 8px;
+    margin-right: 3px;
     /* animation: colorChange 4s infinite; */
 }
 
@@ -144,6 +126,7 @@ button {
 
 .dropdown-container {
     /* border: 2px solid orange; */
+    display: flex;
     justify-content: center;
     gap: 1rem;
     flex-direction: column;
@@ -159,10 +142,10 @@ button {
 .button-container {
     display: flex;
     justify-content: center;
-    /* border: 1px solid white; */
+    /* border: 2px solid green; */
     border-radius: 25px;
-    padding: 10px;
-    margin-top: 5px;
+    padding-bottom: 10px;
+    /* margin-top: 5px; */
 }
 
 @media only screen and (min-width: 770px) {
@@ -170,7 +153,7 @@ button {
         display: grid;
         /* display: flex; */
         /* flex-direction: column; */
-        grid-template-columns: 330px 330px;
+        grid-template-columns: 33% 33%;
     }
 
     .dropdown-container {
@@ -187,155 +170,185 @@ button {
 @media only screen and (min-width: 1024px) {
     #showChart {
         display: grid;
-        /* display: flex; */
-        grid-template-columns: 330px 330px 330px;
+        grid-template-columns: 33% 33% 33%;
     }
 
-    .container {
-        display: flex;
-        justify-content: center;
+    @media only screen and (min-width: 1200px) {
+        #showChart {
+            display: grid;
+            grid-template-columns: 25% 25% 25% 25%;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .dropdown-container {
+            display: flex;
+            flex-direction: row;
+            gap: 3rem;
+            justify-content: center;
+            height: 100px;
+            /* background-color: #717171; */
+            align-items: center;
+            border-radius: 50px;
+        }
     }
 
-    .dropdown-container {
+
+
+    .img_url {
+        border-radius: 50px;
+        height: 55px;
+        width: 55px;
+        margin-left: -3px;
+        border: 1px solid #434343;
+    }
+
+    .loader_img {
+        height: 55px;
+        width: 55px;
+        margin-bottom: 25px;
+        margin-top: 5px;
+    }
+
+    .track {
+        padding: 10px;
+        font-size: 12px;
+        font-family: monospace;
+        /* font-size: 11px; */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .track:hover {
+        color: white;
+    }
+
+    .track-artist-container,
+    .btn-primary,
+    .form-select,
+    .modal-content {
+        color: #d7dadc;
+        background-color: #434343;
+        border: 1px solid #acacac;
+    }
+
+    .btn-primary:hover {
+        border: 1px solid white;
+        background-color: #04aa6d;
+    }
+
+    .form-select:hover {
+        border: 1px solid white;
+        color: white;
+        background-color: black;
+    }
+
+    /* The Modal (background) */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0, 0, 0);
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    /* Modal Content/Box */
+    .modal-content {
+        /* background-color: #737373; */
+        background-color: black;
+        margin: 15% auto;
+        /* padding: 20px; */
+        border: 1px solid white;
+        /* width: 60%;
+    height: 10%; */
         display: flex;
-        flex-direction: row;
-        gap: 3rem;
-        justify-content: center;
-        height: 100px;
-        /* background-color: #717171; */
+        flex-direction: column;
+        text-align: left;
         align-items: center;
+        color: black;
         border-radius: 50px;
     }
-}
 
-.img_url {
-    border-radius: 50px;
-    height: 55px;
-    width: 55px;
-    margin-left: -3px;
-    border: 1px solid #434343;
-}
+    #editNameBtn {
+        color: white;
+        border-radius: 20px;
+        background-color: black;
+        border: solid 2px rgb(148, 190, 245);
+        margin-left: 10px;
+    }
 
-.loader_img {
-    height: 55px;
-    width: 55px;
-    margin-bottom: 25px;
-    margin-top: 5px;
-}
+    #nameInput {
+        border-radius: 50px;
+        border: solid 2px rgb(148, 190, 245);
+        height: 35px;
+    }
 
-.track {
-    padding: 10px;
-    font-size: 12px;
-    font-family: monospace;
-    /* font-size: 11px; */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
+    /* The Close Button */
+    .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
 
-.track:hover {
-    color: white;
-}
+    .close:hover,
+    .close:focus {
+        color: white;
+        text-decoration: none;
+        cursor: pointer;
+    }
 
-.track-artist-container,
-.btn-primary,
-.form-select,
-.modal-content {
-    color: #d7dadc;
-    background-color: #434343;
-    border: 1px solid #acacac;
-}
+    #myProgress {
+        width: 100%;
+        background-color: grey;
+    }
 
-.btn-primary:hover {
-    border: 1px solid white;
-}
+    #myBar {
+        width: 10%;
+        height: 30px;
+        background-color: #04aa6d;
+        text-align: center;
+        /* To center it horizontally (if you want) */
+        line-height: 30px;
+        /* To center it vertically */
+        color: white;
+    }
 
-.form-select:hover {
-    border: 1px solid white;
-    color: white;
-    background-color: black;
-}
+    option {
+        /*   background-color: #ffe0b3; */
+        text-align: left;
+        background-color: #434343;
+        color: white;
+    }
 
-/* The Modal (background) */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgb(0, 0, 0);
-    background-color: rgba(0, 0, 0, 0.7);
-}
+    .input-group {
+        display: flex;
+        /* flex-direction: column; */
+        justify-content: center;
+        border: 2px solid yellow;
 
-/* Modal Content/Box */
-.modal-content {
-    /* background-color: #737373; */
-    background-color: black;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid white;
-    /* width: 60%;
-    height: 10%; */
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    align-items: center;
-    color: black;
-    border-radius: 50px;
-}
+    }
 
-#editNameBtn {
-    color: white;
-    border-radius: 20px;
-    background-color: black;
-    border: solid 2px rgb(148, 190, 245);
-    margin-left: 10px;
-}
+    .input-group-prepend {
+        display: flex;
+        justify-content: center;
+        border: 2px solid blue;
+        width: 100px;
+    }
 
-#nameInput {
-    border-radius: 50px;
-    border: solid 2px rgb(148, 190, 245);
-    height: 35px;
-}
-
-/* The Close Button */
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 15px;
-}
-
-.close:hover,
-.close:focus {
-    color: white;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-#myProgress {
-    width: 100%;
-    background-color: grey;
-}
-
-#myBar {
-    width: 10%;
-    height: 30px;
-    background-color: #04aa6d;
-    text-align: center;
-    /* To center it horizontally (if you want) */
-    line-height: 30px;
-    /* To center it vertically */
-    color: white;
-}
-
-option {
-    /*   background-color: #ffe0b3; */
-    text-align: left;
-    background-color: #434343;
-    color: white;
-}
+    .modal-content {
+        border: 2px solid green;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+    }

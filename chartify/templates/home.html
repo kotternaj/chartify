@@ -3,7 +3,7 @@
 
 <div class="container">
     <div class="text">
-        <p class="ptext">1. Choose a UK chart from the dropdowns:</p>
+        <p class="ptext">1. Choose a chart:</p>
     </div>
     <div class="dropdown-container">
         <select id='chooseDecade' name='chooseDecade' class="form-select" aria-label="Default select example"
@@ -25,41 +25,49 @@
         </button>
     </div>
 
+    <div class='text'>
+        <p>2. Add all songs below to playlist or tap song(s) to exclude: </p>
+    </div>
     <div class="button-container">
-        <button id='createPL' type="button" class='btn btn-primary'>Add
-            Playlist To
-            Spotify
-        </button>
+        <div><button id='createPL' type="button" class='btn btn-primary'>Create
+                Playlist in
+                Spotify
+            </button>
+        </div>
+    </div>
 
 
-        <div id="editPlaylistName" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <p class="customPLname">3. Customize playlist name or use default shown</p>
-                <div class="input-group mb-3">
-                    <input type="text" id='nameInput' class="form-control" placeholder="" aria-label=""
-                        aria-describedby="basic-addon1">
-                    <div class="input-group-prepend">
-                        <button id='editNameBtn' class="btn btn-outline-secondary" type="button">Submit</button>
-                    </div>
-
+    <div id="editPlaylistName" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="text">
+                <p class="customPLname">Customize playlist name or use default shown:</p>
+            </div>div>
+            <div class="input-group mb-3">
+                <input type="text" id='nameInput' class="form-control" placeholder="" aria-label=""
+                    aria-describedby="basic-addon1">
+                <div class="input-group-prepend">
+                    <button id='editNameBtn' class="btn btn-outline-secondary" type="button">Submit</button>
                 </div>
+
             </div>
         </div>
     </div>
-    <div class="text">
-        <p class="ptext">2. Select any songs you want <i>excluded</i> from the playlist:</p>
-    </div>
-    <!-- <br /> -->
+
+    <!-- <div class="text">
+        <p class="ptext">Tap any songs to exclude from playlist:</p>
+    </div> -->
     <div id='showChart' name='showChart'></div>
-    <br />
+
+
 
     <div class=" button-container">
-        <button id='createPL2' type="button" class='btn btn-primary'>Add
-            Playlist To
-            Spotify</button>
+        <button id='createPL2' type="button" class='btn btn-primary'>Create
+            Playlist in
+            Spotify
+        </button>
     </div>
-    <!-- <button id="myBtn">Open Modal</button> -->
+</div>
 </div>
 
 <script>
