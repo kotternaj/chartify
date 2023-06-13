@@ -3,7 +3,6 @@
 }
 
 body {
-
     background-color: black;
 }
 
@@ -12,11 +11,14 @@ p {
     height: 0px;
 }
 
+/* 
 .customPLname {
     color: white;
     /* padding: 1px; */
-    margin-bottom: 35px;
-}
+/* margin-bottom: 35px;
+} */
+
+
 
 /*  DROPDOWNS ********************* */
 .form-select {
@@ -49,10 +51,10 @@ button {
     width: 190px;
 }
 
-#chooseDecade,
+/* #chooseDecade,
 #chooseYear {
     width: 125px;
-}
+} */
 
 .btn-primary {
     color: black;
@@ -62,7 +64,7 @@ button {
 }
 
 #randomizeBtn {
-    width: 125px;
+    /* width: 125px; */
     color: #d7dadc;
     background-color: #434343;
     border: 1px solid #acacac;
@@ -76,26 +78,22 @@ button {
 }
 
 .text {
-    display: flex;
-    font-size: 13px;
+    /* display: flex; */
+    font-size: 12px;
     justify-content: center;
     align-items: center;
-    /* border: 2px solid red; */
-    height: 40px;
-    padding: 10px;
-    margin-bottom: 15px;
+    /* height: 40px; */
     font-style: italic;
-
 }
 
 /*  DIVS ********************* */
 .header {
     /* padding: 30px; */
     text-align: center;
-    margin-bottom: 35px;
+    margin-bottom: 20px;
     /* background: #1abc9c; */
     color: white;
-    font-size: 75px;
+    font-size: 60px;
     /* border: 1px dashed red; */
     font-family: Luminari;
     /* background-image: linear-gradient(to right, red, yellow); */
@@ -123,21 +121,25 @@ button {
     justify-content: center;
 }
 
+.dropdown-container {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    border-radius: 50px;
+    border: 1px solid #717171;
+    /* width: 60%; */
+    padding: 10px;
+}
 
 .track-artist-container {
     display: flex;
     text-align: left;
     align-items: center;
-    /* color: black; */
     border-radius: 50px;
-    /* background-color: #ffc266;
-    border: 1px solid black; */
-    /* width: 300px; */
-    /* width: auto; */
-    margin-left: 3px;
-    margin-bottom: 8px;
-    margin-right: 3px;
-    /* animation: colorChange 4s infinite; */
 }
 
 #showChart {
@@ -145,26 +147,11 @@ button {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-top: 5px;
+    /* margin-top: 20px; */
     border: 1px solid #717171;
     border-radius: 50px;
     padding: 20px;
-}
-
-
-.dropdown-container {
-    /* border: 2px solid orange; */
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    flex-direction: column;
-    display: flex;
-    align-items: center;
-    margin-bottom: 25px;
-    border-radius: 50px;
-    border: 1px solid #717171;
-    /* width: 60%; */
-    padding: 10px;
+    gap: .5rem;
 }
 
 .button-container {
@@ -172,17 +159,28 @@ button {
     justify-content: center;
     /* border: 2px solid green; */
     border-radius: 25px;
-    padding-bottom: 10px;
+    padding-bottom: 20px;
     padding-top: 15px;
     /* margin-top: 5px; */
 }
 
-/* @media only screen and (min-width: 420px) {
+@media only screen and (min-width: 420px) {
+    .text {
+        margin-left: 3px;
+        /* margin-bottom: 8px; */
+        margin-right: 3px;
+    }
+
     #showChart {
         display: grid;
-        grid-template-columns: 33% 33%;
+        grid-template-columns: 50% 50%;
     }
-} */
+
+    .modal-content {
+        width: 70%;
+    }
+}
+
 
 @media only screen and (min-width: 770px) {
     #showChart {
@@ -190,6 +188,7 @@ button {
         /* display: flex; */
         /* flex-direction: column; */
         grid-template-columns: 33% 33% 33%;
+        gap: .5rem;
     }
 
     .dropdown-container {
@@ -201,19 +200,29 @@ button {
         align-items: center;
         border-radius: 50px;
     }
+
+    .modal-content {
+        width: 60%;
+    }
 }
 
 @media only screen and (min-width: 1024px) {
     #showChart {
         display: grid;
         grid-template-columns: 33% 33% 33%;
+        gap: .5rem;
+    }
+
+    .modal-content {
+        width: 60%;
     }
 }
 
 @media only screen and (min-width: 1200px) {
     #showChart {
         display: grid;
-        grid-template-columns: 25% 25% 25% 25%;
+        grid-template-columns: 23% 23% 23% 23%;
+        gap: .5rem;
     }
 
     .container {
@@ -228,8 +237,11 @@ button {
         justify-content: center;
         height: 100px;
         /* background-color: #717171; */
-        align-items: center;
         border-radius: 50px;
+    }
+
+    .modal-content {
+        width: 60%;
     }
 }
 
@@ -243,12 +255,12 @@ button {
     border: 1px solid #434343;
 }
 
-.loader_img {
+/* .loader_img {
     height: 55px;
     width: 55px;
     margin-bottom: 25px;
     margin-top: 5px;
-}
+} */
 
 .track {
     padding: 10px;
@@ -319,14 +331,16 @@ button {
     color: white;
     border-radius: 20px;
     background-color: black;
-    border: solid 2px rgb(148, 190, 245);
-    margin-left: 10px;
+    border: solid 1px rgb(148, 190, 245);
+    width: 100px;
+    margin-bottom: 15px;
+    /* margin-left: 10px; */
 }
 
 #nameInput {
     border-radius: 50px;
     border: solid 2px rgb(148, 190, 245);
-    height: 35px;
+    /* height: 35px; */
 }
 
 /* The Close Button */
@@ -335,7 +349,7 @@ button {
     float: right;
     font-size: 28px;
     font-weight: bold;
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
 }
 
 .close:hover,
@@ -351,16 +365,14 @@ button {
 }
 
 /**/
-#myBar {
+/* #myBar {
     width: 10%;
     height: 30px;
     background-color: #04aa6d;
     text-align: center;
-    /* To center it horizontally (if you want) */
     line-height: 30px;
-    /* To center it vertically */
     color: white;
-}
+} */
 
 option {
     /*   background-color: #ffe0b3; */
@@ -370,21 +382,11 @@ option {
 }
 
 .input-group {
-    display: flex;
-    /* flex-direction: column; */
-    justify-content: center;
-    border: 2px solid yellow;
-
+    width: 80%;
 }
 
-.input-group-prepend {
-    display: flex;
-    justify-content: center;
-    border: 2px solid blue;
-    width: 100px;
-}
 
-.modal-content {
+*/ .modal-content {
     border: 2px solid green;
     display: flex;
     justify-content: center;
