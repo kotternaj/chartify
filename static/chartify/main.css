@@ -9,25 +9,16 @@ body {
 p {
     color: white;
     height: 0px;
+    margin-bottom: 2rem;
 }
-
-/* 
-.customPLname {
-    color: white;
-    /* padding: 1px; */
-/* margin-bottom: 35px;
-} */
-
 
 
 /*  DROPDOWNS ********************* */
 .form-select {
-    /* background-color: #ffe0b3; */
     border-radius: 20px;
     width: 120px;
     transition: background-color 0.5s ease-in-out;
     border: 1px solid black;
-    /*     caret-color: red; */
     text-align: center;
 }
 
@@ -51,11 +42,6 @@ button {
     width: 190px;
 }
 
-/* #chooseDecade,
-#chooseYear {
-    width: 125px;
-} */
-
 .btn-primary {
     color: black;
     background-color: orange;
@@ -64,7 +50,7 @@ button {
 }
 
 #randomizeBtn {
-    /* width: 125px; */
+
     color: #d7dadc;
     background-color: #434343;
     border: 1px solid #acacac;
@@ -78,7 +64,7 @@ button {
 }
 
 .text {
-    /* display: flex; */
+    display: flex;
     font-size: 12px;
     justify-content: center;
     align-items: center;
@@ -88,15 +74,12 @@ button {
 
 /*  DIVS ********************* */
 .header {
-    /* padding: 30px; */
+
     text-align: center;
     margin-bottom: 20px;
-    /* background: #1abc9c; */
     color: white;
     font-size: 60px;
-    /* border: 1px dashed red; */
     font-family: Luminari;
-    /* background-image: linear-gradient(to right, red, yellow); */
     animation: color-change 10s infinite;
 }
 
@@ -115,7 +98,6 @@ button {
 }
 
 .container {
-    /* border: 2px solid green; */
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -131,7 +113,6 @@ button {
     margin-bottom: 10px;
     border-radius: 50px;
     border: 1px solid #717171;
-    /* width: 60%; */
     padding: 10px;
 }
 
@@ -143,11 +124,9 @@ button {
 }
 
 #showChart {
-    /* display: grid; */
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* margin-top: 20px; */
     border: 1px solid #717171;
     border-radius: 50px;
     padding: 20px;
@@ -157,17 +136,14 @@ button {
 .button-container {
     display: flex;
     justify-content: center;
-    /* border: 2px solid green; */
     border-radius: 25px;
     padding-bottom: 20px;
     padding-top: 15px;
-    /* margin-top: 5px; */
 }
 
 @media only screen and (min-width: 420px) {
     .text {
         margin-left: 3px;
-        /* margin-bottom: 8px; */
         margin-right: 3px;
     }
 
@@ -181,12 +157,9 @@ button {
     }
 }
 
-
 @media only screen and (min-width: 770px) {
     #showChart {
         display: grid;
-        /* display: flex; */
-        /* flex-direction: column; */
         grid-template-columns: 33% 33% 33%;
         gap: .5rem;
     }
@@ -196,7 +169,6 @@ button {
         flex-direction: row;
         gap: 3rem;
         justify-content: center;
-        /* background-color: #717171; */
         align-items: center;
         border-radius: 50px;
     }
@@ -236,7 +208,6 @@ button {
         gap: 3rem;
         justify-content: center;
         height: 100px;
-        /* background-color: #717171; */
         border-radius: 50px;
     }
 
@@ -245,8 +216,6 @@ button {
     }
 }
 
-
-
 .img_url {
     border-radius: 50px;
     height: 55px;
@@ -254,13 +223,6 @@ button {
     margin-left: -3px;
     border: 1px solid #434343;
 }
-
-/* .loader_img {
-    height: 55px;
-    width: 55px;
-    margin-bottom: 25px;
-    margin-top: 5px;
-} */
 
 .track {
     padding: 10px;
@@ -312,13 +274,10 @@ button {
 
 /* Modal Content/Box */
 .modal-content {
-    /* background-color: #737373; */
+
     background-color: black;
     margin: 15% auto;
-    /* padding: 20px; */
     border: 1px solid white;
-    /* width: 60%;
-    height: 10%; */
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -334,13 +293,11 @@ button {
     border: solid 1px rgb(148, 190, 245);
     width: 100px;
     margin-bottom: 15px;
-    /* margin-left: 10px; */
 }
 
 #nameInput {
     border-radius: 50px;
     border: solid 2px rgb(148, 190, 245);
-    /* height: 35px; */
 }
 
 /* The Close Button */
@@ -349,7 +306,6 @@ button {
     float: right;
     font-size: 28px;
     font-weight: bold;
-    /* margin-bottom: 15px; */
 }
 
 .close:hover,
@@ -364,18 +320,8 @@ button {
     background-color: grey;
 }
 
-/**/
-/* #myBar {
-    width: 10%;
-    height: 30px;
-    background-color: #04aa6d;
-    text-align: center;
-    line-height: 30px;
-    color: white;
-} */
-
 option {
-    /*   background-color: #ffe0b3; */
+
     text-align: left;
     background-color: #434343;
     color: white;
