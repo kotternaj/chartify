@@ -11,39 +11,15 @@ from chartify.models import Playlist, Track
 
 
 def main():
-    _path = "C:\\Users\\jredd\\PycharmProjects\\mongo\\charts\\pkl_dest_test"
-
-    # fdate = ["20230402", "20230409", "20230416", "20230430"]
-
-    fdate = "20230521"
-    # fn = fdate
-
-    #### PRODUCTION CODE STARTS HERE ####
-
-    # fdate = get_date_today()
+    fdate = get_date_today()
     current_chart_url = create_url_from_date(fdate)
     chart = scrape_weekly_chart(fdate, current_chart_url)
-    chart, do_not_exist = get_track_ids_from_spotify(chart)
+    chart = get_track_ids_from_spotify(chart)
     add_pl_and_tracks_to_db(chart, fdate)
-    # pickle_dump(chart, _path, "cjart_w_ids")
-    # write_to_txt_file(chart, _path, "cjart_w_ids")
-
-    # chart, fdate = pickle_load(path, fdate)
-    # pickle_dump(chart, path, fdate)
-    # write_to_txt_file(chart, tpath, fdate)
-    # add_chart_to_mongo(chart, collection=fdate)
-    # data.sort(key=lambda a: a[2])
-
-
-def pickled_charts_to_db(pickle_path):
-    for file in os.listdir(pickle_path):
-        fn, ext = os.path.splitext(file)
-        chart, fn = pickle_load(pickle_path, fn)
-        add_pl_and_tracks_to_db(chart, fn)
 
 
 def add_pl_and_tracks_to_db(chart, fn):
-    added, not_added = [], []
+    added = []
     plname = datetime.strptime(fn, "%Y%m%d").strftime("%Y - Week %U - %b %d")
     # create playlist in db, name format 19600104
     if not Playlist.objects.filter(playlist_id=fn).exists():
@@ -57,8 +33,8 @@ def add_pl_and_tracks_to_db(chart, fn):
                 entry[0],
                 entry[1],
                 entry[2],
-                entry[4],
                 entry[3],
+                entry[4],
             )
             track = Track.objects.create(
                 track_id=track_id,
@@ -70,45 +46,24 @@ def add_pl_and_tracks_to_db(chart, fn):
             playlist.track.add(track)
             added.append(track)
         except:
-            not_added.append(entry)
-            # print("Song not added to playlist: {} - {}".format(name, artist))
-
-    print("songs added: ", len(added))
-    [print(song) for song in not_added]
-    return added, not_added
-
-
-def create_blank_plist(sp, user_id, pl_name):
-    sp.user_playlist_create(user_id, pl_name)
-    playlists = sp.user_playlists(user_id)
-    pl_id = ""
-    for pl in playlists["items"]:
-        if pl["name"] == pl_name:
-            pl_id = pl["id"]
-    return pl_id
-
-
-def populate_playlist(sp, user_id, pl_id, track_ids):
-    sp.user_playlist_add_tracks(user_id, pl_id, track_ids)
+            continue
+    return added
 
 
 def get_track_ids_from_spotify(chart):
-    tracks_w_ids, do_not_exist = [], []
+    tracks_w_ids = []
     sp = app_login()
     for entry in chart:
         title, artist = entry[1], entry[2]
         search_query = f"{title} {artist}"
         result = sp.search(q=search_query, limit=5, type="track")
         if result["tracks"]["total"] == 0:
-            do_not_exist.append(entry)
             continue
         else:
             spot_id = result["tracks"]["items"][0]["id"]
-            # print(spot_id)
             song_w_id = (*entry, spot_id)
-            print(song_w_id)
             tracks_w_ids.append(song_w_id)
-    return tracks_w_ids, do_not_exist
+    return tracks_w_ids
 
 
 def scrape_weekly_chart(fdate, url):
@@ -147,60 +102,6 @@ def get_date_from_url(url):
     return date_string
 
 
-def pickle_dump(data, path, filename):
-    complete_path = os.path.join(path, filename + ".pkl")
-    with open(complete_path, "wb") as f:
-        pickle.dump(data, f)
-        print("Data pickled: ", complete_path)
-
-
-def pickle_load(path, filename):
-    fn = filename
-    if filename[:-4] != ".pkl":
-        filename = filename + ".pkl"
-    complete_path = os.path.join(path, filename)
-    # filename = os.path.basename(os.path.normpath(filename))
-
-    with open(complete_path, "rb") as f:
-        # print("Unpickling / opening data: ", complete_path)
-        udata = pickle.load(f)
-    return udata, fn
-
-
-def write_to_txt_file(data, path, filename):
-    complete_path = os.path.join(path, filename + ".txt")
-    with open(complete_path, "w", encoding="utf-8") as f:
-        for item in data:
-            f.write(str(item))
-            f.write("\n")
-    print("text file created: ", filename)
-
-
-def append_to_txt_file(data, path, filename):
-    complete_path = os.path.join(path, filename + ".txt")
-    with open(complete_path, "a", encoding="utf-8") as f:
-        for item in data:
-            f.write(str(item))
-            f.write("\n")
-    print("text file appended: ", filename)
-
-
-def read_txt_file(path, filename):
-    if filename[:-4] != ".txt":
-        filename = filename + ".txt"
-    complete_path = os.path.join(path, filename)
-    with open(complete_path, "r") as f:
-        print("opening data: ", complete_path)
-        data = [line.strip() for line in f]
-        # data = [line for line in f]
-    return data
-
-
-def make_tuple(data):
-    data = [literal_eval(x) for x in data]
-    return data
-
-
 def get_date_today():
     now = datetime.now()
     fdate = now.strftime("%Y%m%d")
@@ -215,6 +116,4 @@ def create_url_from_date(today):
 
 
 if __name__ == "__main__":
-    # main()
-    _path = "C:\\Users\\jredd\\PycharmProjects\\mongo\\charts\\pkl_dest"
-    pickled_charts_to_db(_path)
+    main()

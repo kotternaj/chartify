@@ -9,7 +9,8 @@ body {
 p {
     color: white;
     height: 0px;
-    margin-bottom: 2rem;
+    text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;
+    /* margin-bottom: 2rem; */
 }
 
 
@@ -76,11 +77,13 @@ button {
 .header {
 
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     color: white;
-    font-size: 60px;
+    font-size: 50px;
     font-family: Luminari;
     animation: color-change 10s infinite;
+    border-radius: 50px;
+    border: 1px solid #717171;
 }
 
 @keyframes color-change {
@@ -111,6 +114,7 @@ button {
     display: flex;
     align-items: center;
     margin-bottom: 10px;
+    gap: .75rem;
     border-radius: 50px;
     border: 1px solid #717171;
     padding: 10px;
@@ -131,6 +135,7 @@ button {
     border-radius: 50px;
     padding: 20px;
     gap: .5rem;
+    margin-top: 10px;
 }
 
 .button-container {
@@ -176,6 +181,10 @@ button {
     .modal-content {
         width: 60%;
     }
+
+    .or {
+        margin-bottom: 13px;
+    }
 }
 
 @media only screen and (min-width: 1024px) {
@@ -187,6 +196,10 @@ button {
 
     .modal-content {
         width: 60%;
+    }
+
+    .or {
+        margin-bottom: 13px;
     }
 }
 
@@ -213,6 +226,10 @@ button {
 
     .modal-content {
         width: 60%;
+    }
+
+    .or {
+        margin-bottom: 13px;
     }
 }
 
@@ -244,7 +261,7 @@ button {
 .modal-content {
     color: #d7dadc;
     background-color: #434343;
-    border: 1px solid #acacac;
+    border: 1px solid #717171;
 }
 
 .btn-primary:hover {
@@ -274,10 +291,9 @@ button {
 
 /* Modal Content/Box */
 .modal-content {
-
     background-color: black;
     margin: 15% auto;
-    border: 1px solid white;
+    border: 1px solid #717171;
     display: flex;
     flex-direction: column;
     text-align: left;
@@ -329,12 +345,4 @@ option {
 
 .input-group {
     width: 80%;
-}
-
-
-*/ .modal-content {
-    border: 2px solid green;
-    display: flex;
-    justify-content: center;
-    align-content: center;
 }

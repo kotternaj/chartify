@@ -7,7 +7,7 @@ from .models import Playlist, Track
 
 def random_chart(request):
     playlists = Playlist.objects.all()
-    tracks = Track.objects.all()
+    # tracks = Track.objects.all()
     randomPlaylist = random.choice(playlists)
     plid = randomPlaylist.playlist_id
     # song_count = len(tracks)

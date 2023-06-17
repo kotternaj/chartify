@@ -5,9 +5,9 @@
     <div class="header">
         Chartify
     </div>
-    <div class="text">
+    <!-- <div class="text">
         <p class="ptext">Choose chart, tap tracks to EXCLUDE, Create Playlist:</p>
-    </div>
+    </div> -->
     <div class="dropdown-container">
         <!-- <div class="text">
             <p class="ptext">1. Choose a chart:</p>
@@ -26,7 +26,10 @@
             onchange="chartDetail()">
             <!-- <option value=19670101 selected>Week 01 - Jan 01</option> -->
         </select>
-        <!-- <p><b>or</b></p> -->
+        <div class="or">
+            <p>or</p>
+        </div>
+        <!-- <p>or</p> -->
         <button id='randomizeBtn' type="button" class='btn btn-primary' onclick="getRandomChart()">Randomize
         </button>
     </div>
@@ -59,9 +62,9 @@
         </div>
     </div>
 
-    <!-- <div class="text">
-        <p class="ptext">Tap any songs to exclude from playlist:</p>
-    </div> -->
+    <div class="text">
+        <p class="ptext">(Tap on songs to exclude from playlist)</p>
+    </div>
 
 
     <div id='showChart' name='showChart'></div>
@@ -73,6 +76,17 @@
             Playlist in
             Spotify
         </button>
+    </div>
+
+    <div class="footer">
+
+        <!-- <img height='50' width='50' color='white'
+            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain-wordmark.svg" /> -->
+
+
+        <i class="devicon-django-plain-wordmark"></i>
+
+
     </div>
 </div>
 </div>
