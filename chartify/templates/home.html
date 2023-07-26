@@ -117,18 +117,25 @@
 
     // 6. Add Playlist to Spotify
     function addPlaylistToApp() {
-        // chart_data = chart_data.filter(elm => elm);
+        spot_ids = [];
+        for (const [key, value] of Object.entries(chart_data)) {
+            let spot_id = (value['spot_id'])
+            spot_ids.push(spot_id)
+        }
+        console.log(spot_ids.length)
         $.ajax({
             type: 'GET',
             data: {
-                // 'chart_data': chart_data,
-                'chart_data': JSON.stringify(chart_data),
+                'spot_ids': spot_ids,
+                // 'spot_ids': JSON.stringify(spot_ids),
+                // 'chart_data': JSON.stringify(chart_data),
                 'pl_name': pl_name,
             },
             url: "{% url 'add_playlist_to_app' %}",
-            success: function (data) {
-                // showSkippedSongs(data)
-                alert('Success')
+            success: function () {
+                var modal = document.getElementById("editPlaylistName");
+                modal.style.display = "none";
+                // alert('Success')
             },
             error: function (response) {
                 alert('Error')
@@ -225,7 +232,8 @@
                         name = (value['name']),
                         artist = (value['artist']),
                         spot_id = (value['spot_id']),
-                        img_url = (value['img_url']);
+                        // img_url = (value['img_url']);
+                        img_url = ('/img/album.png');
                     html_data += `<div class="track-artist-container" value="${rank}"><img class="img_url"
                                         src="${img_url}" onError="this.onerror=null;this.src='/img/album.png';"</img>
                                    <div class="track"><b>${name} - (${rank})</b><br/>${artist}</div>
@@ -266,6 +274,7 @@
             },
         });
     }
+
 
     //dropdowns
     function chooseWeek() {
