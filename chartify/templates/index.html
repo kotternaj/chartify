@@ -31,16 +31,18 @@
     </div>
     {% endblock %}
 
-    {% block topCreateButton %}
+    {% block topLogInBtn %}
     <div class="button-container">
-        <div><button id='createPL' type="button" class='btn btn-primary'>Create
-                Playlist in
-                Spotify
+        <div><button id='loginBtn' type="button" class='btn btn-primary'><a class="loginLink"
+                    href="{% url 'login' %}">Log into Spotify to Create Playlist
+                </a>
             </button>
         </div>
     </div>
     {% endblock %}
 
+
+    {% block editNameModal %}
     <div id="editPlaylistName" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -56,103 +58,10 @@
             </div>
         </div>
     </div>
-
-    <div class="text">
-        <p class="ptext">(Tap on songs to exclude from playlist)</p>
-    </div>
+    {% endblock %}
 
     {% block chart %}
     <div id='showChart' name='showChart'></div>
     {% endblock %}
 
-    {% block bottomCreateButton %}
-    <div class=" button-container">
-        <button id='createPL2' type="button" class='btn btn-primary'>Create
-            Playlist in
-            Spotify
-        </button>
-    </div>
-    {% endblock %}
-
-    <div class="footer">
-        <i class="devicon-django-plain-wordmark"></i>
-    </div>
-
 </div>
-
-
-
-
-
-
-
-
-
-<!-- <div class="container">
-    <div class="header">
-        Chartify
-    </div>
-
-    <div class="dropdown-container">
-        <select id='chooseDecade' name='chooseDecade' class="form-select" aria-label="Default select example"
-            onchange="chooseYear()">         
-        </select>
-
-        <select id='chooseYear' name='chooseYear' class="form-select" aria-label="Default select example"
-            onchange="chooseWeek()">     
-        </select>
-
-        <select id='chooseWeek' name='chooseWeek' class="form-select" aria-label="Default select example"
-            onchange="chartDetail()">
-        </select>
-
-        <div class="or">
-            <p>or</p>
-        </div>
-
-        <button id='randomizeBtn' type="button" class='btn btn-primary' onclick="getRandomChart()">Randomize
-        </button>
-    </div>
-
-    <div class="button-container">
-        <div><button id='createPL' type="button" class='btn btn-primary'>Create
-                Playlist in
-                Spotify
-            </button>
-        </div>
-    </div>
-
-    <div id="editPlaylistName" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="text">
-                <p class="customPLname">Customize playlist name or use default shown:</p>
-            </div>div>
-            <div class="input-group mb-3">
-                <input type="text" id='nameInput' class="form-control" placeholder="" aria-label=""
-                    aria-describedby="basic-addon1">
-            </div>
-            <div class="input-group-prepend">
-                <button id='editNameBtn' class="btn btn-outline-secondary" type="button">Submit</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="text">
-        <p class="ptext">(Tap on songs to exclude from playlist)</p>
-    </div>
-
-    <div id='showChart' name='showChart'></div>
-
-    <div class=" button-container">
-        <button id='createPL2' type="button" class='btn btn-primary'>Create
-            Playlist in
-            Spotify
-        </button>
-    </div>
-
-    <div class="footer">
-        <i class="devicon-django-plain-wordmark"></i>
-    </div>
-
-</div> -->

@@ -29,7 +29,7 @@ def add_playlist_to_app(request):
         pl_name = request.GET["pl_name"]
     pl_id = create_blank_plist(sp, user_id, pl_name)
     populate_playlist(sp, user_id, pl_id, spot_ids)
-    return redirect("index")
+    return redirect("chart")
 
 
 # works
@@ -58,7 +58,7 @@ def callback(request):
     user_id = sp.current_user()["id"]
     # else:
     #     refresh()
-    return redirect("index")
+    return redirect("chart")
     # return render(request, "home.html", {})
 
 
@@ -71,7 +71,6 @@ def callback(request):
 
 
 def create_spotify_oauth(request):
-    # print("request sent to create_oauth func: ", request)
     cache_handler = spotipy.DjangoSessionCacheHandler(request=request)
     return SpotifyOAuth(
         client_id=CID,
@@ -81,20 +80,6 @@ def create_spotify_oauth(request):
         show_dialog=True,
         cache_handler=cache_handler,
     )
-
-
-# ORIGINAL
-def loginO(request):
-    sp_oauth = create_spotify_oauth(request)
-    sp = spotipy.Spotify(auth_manager=sp_oauth)
-
-    # code = sp_oauth.get_auth_response(open_browser=True)
-    # token = sp_oauth.get_access_token(code, check_cache=False)
-    # sp = spotipy.Spotify(auth=token["access_token"], requests_timeout=25)
-
-    user_id = sp.current_user()["id"]
-    print("sp: {}, username: {} ".format(sp.me(), user_id))
-    return sp, user_id
 
 
 def app_login():
@@ -152,10 +137,6 @@ def show_weeks(request):
         except Exception:
             print("Error occured")
         return JsonResponse(list(playlists.values("playlist_id", "name")), safe=False)
-
-
-# def home(request):
-#     return render(request, "home.html", {})
 
 
 def index(request):

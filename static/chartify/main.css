@@ -4,6 +4,7 @@
 
 body {
     background-color: black;
+    margin-right: 10px;
 }
 
 p {
@@ -263,6 +264,7 @@ button {
     border: 1px solid #434343;
 }
 
+
 .track {
     padding: 10px;
     font-size: 12px;
@@ -289,6 +291,7 @@ button {
 .btn-primary:hover {
     border: 1px solid white;
     background-color: #04aa6d;
+
 }
 
 .form-select:hover {
@@ -368,3 +371,25 @@ option {
 .input-group {
     width: 80%;
 }
+
+.loginLink,
+.loginLink:hover,
+.loginLink:visited {
+    text-decoration: none;
+    color: #d7dadc;
+}
+
+a :hover {
+    text-decoration: none;
+    color: #d7dadc;
+}
+
+#loginBtn {
+    background-color: rgb(202, 33, 33);
+    color: black;
+}
+
+/* #loginBtn :hover {
+    border: 1px solid white;
+    background-color: #04aa6d;
+} */
