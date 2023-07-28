@@ -1,42 +1,37 @@
 {% extends 'base.html' %}
-{% block content %}
+
 
 <div class="container">
+    {% block header %}
     <div class="header">
         Chartify
     </div>
-    <!-- <div class="text">
-        <p class="ptext">Choose chart, tap tracks to EXCLUDE, Create Playlist:</p>
-    </div> -->
+    {% endblock %}
+
+    {% block dropdowns %}
     <div class="dropdown-container">
-        <!-- <div class="text">
-            <p class="ptext">1. Choose a chart:</p>
-        </div> -->
         <select id='chooseDecade' name='chooseDecade' class="form-select" aria-label="Default select example"
             onchange="chooseYear()">
-            <!-- <option value='1950' selected>1950</option> -->
         </select>
 
         <select id='chooseYear' name='chooseYear' class="form-select" aria-label="Default select example"
             onchange="chooseWeek()">
-            <!-- <option value=1967 selected></option> -->
         </select>
 
         <select id='chooseWeek' name='chooseWeek' class="form-select" aria-label="Default select example"
             onchange="chartDetail()">
-            <!-- <option value=19670101 selected>Week 01 - Jan 01</option> -->
         </select>
+
         <div class="or">
             <p>or</p>
         </div>
-        <!-- <p>or</p> -->
+
         <button id='randomizeBtn' type="button" class='btn btn-primary' onclick="getRandomChart()">Randomize
         </button>
     </div>
+    {% endblock %}
 
-    <!-- <div class='text'>
-        <p>2. Tap song(s) to exclude from playlist, then Create Playlist: </p>
-    </div> -->
+    {% block topCreateButton %}
     <div class="button-container">
         <div><button id='createPL' type="button" class='btn btn-primary'>Create
                 Playlist in
@@ -44,7 +39,7 @@
             </button>
         </div>
     </div>
-
+    {% endblock %}
 
     <div id="editPlaylistName" class="modal">
         <div class="modal-content">
@@ -66,10 +61,88 @@
         <p class="ptext">(Tap on songs to exclude from playlist)</p>
     </div>
 
+    {% block chart %}
+    <div id='showChart' name='showChart'></div>
+    {% endblock %}
+
+    {% block bottomCreateButton %}
+    <div class=" button-container">
+        <button id='createPL2' type="button" class='btn btn-primary'>Create
+            Playlist in
+            Spotify
+        </button>
+    </div>
+    {% endblock %}
+
+    <div class="footer">
+        <i class="devicon-django-plain-wordmark"></i>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+<!-- <div class="container">
+    <div class="header">
+        Chartify
+    </div>
+
+    <div class="dropdown-container">
+        <select id='chooseDecade' name='chooseDecade' class="form-select" aria-label="Default select example"
+            onchange="chooseYear()">         
+        </select>
+
+        <select id='chooseYear' name='chooseYear' class="form-select" aria-label="Default select example"
+            onchange="chooseWeek()">     
+        </select>
+
+        <select id='chooseWeek' name='chooseWeek' class="form-select" aria-label="Default select example"
+            onchange="chartDetail()">
+        </select>
+
+        <div class="or">
+            <p>or</p>
+        </div>
+
+        <button id='randomizeBtn' type="button" class='btn btn-primary' onclick="getRandomChart()">Randomize
+        </button>
+    </div>
+
+    <div class="button-container">
+        <div><button id='createPL' type="button" class='btn btn-primary'>Create
+                Playlist in
+                Spotify
+            </button>
+        </div>
+    </div>
+
+    <div id="editPlaylistName" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="text">
+                <p class="customPLname">Customize playlist name or use default shown:</p>
+            </div>div>
+            <div class="input-group mb-3">
+                <input type="text" id='nameInput' class="form-control" placeholder="" aria-label=""
+                    aria-describedby="basic-addon1">
+            </div>
+            <div class="input-group-prepend">
+                <button id='editNameBtn' class="btn btn-outline-secondary" type="button">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="text">
+        <p class="ptext">(Tap on songs to exclude from playlist)</p>
+    </div>
 
     <div id='showChart' name='showChart'></div>
-
-
 
     <div class=" button-container">
         <button id='createPL2' type="button" class='btn btn-primary'>Create
@@ -79,16 +152,7 @@
     </div>
 
     <div class="footer">
-
-        <!-- <img height='50' width='50' color='white'
-            src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain-wordmark.svg" /> -->
-
-
         <i class="devicon-django-plain-wordmark"></i>
-
-
     </div>
-</div>
-</div>
 
-{% endblock %}
+</div> -->

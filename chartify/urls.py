@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    # path("home", views.home, name="home"),
+    path("chart", views.chart, name="chart"),
     path("chart_detail/", views.chart_detail, name="chart_detail"),
     path("show_weeks", views.show_weeks, name="show_weeks"),
     path(
@@ -14,6 +14,6 @@ urlpatterns = [
     path("random_chart", views.random_chart, name="random_chart"),
     path("login", views.login, name="login"),
     path("callback", views.callback, name="callback"),
-    # path("", views.splash, name="splash"),
+    path("splash", views.splash, name="splash"),
     path("", views.index, name="index"),
 ]
