@@ -73,9 +73,18 @@ def scrape_weekly_chart(fdate, url):
     res = requests.get(url, headers=headers)
     soup = BS(res.content, "html.parser")
 
-    titles = [title.text.strip() for title in soup.find_all("div", class_="title")]
-    artists = [artist.text.strip() for artist in soup.find_all("div", class_="artist")]
-    img_urls = [img["src"] for img in soup.select(".chart img")]
+    titles = [
+        title.contents[-1].text.strip()
+        for title in soup.find_all("a", class_="chart-name")
+    ]
+    # print(titles)
+    # print(len(titles))
+    artists = [
+        artist.text.strip() for artist in soup.find_all("a", class_="chart-artist")
+    ]
+    # print(len(artists))
+    img_urls = [img["src"] for img in soup.find_all("img", class_="chart-image-large")]
+    # print(len(img_urls))
     imgs = [img_url.replace("/img/60x60.gif", "/img/album.png") for img_url in img_urls]
     ranks = [i for i in range(1, len(titles) + 1)]
 
@@ -83,6 +92,25 @@ def scrape_weekly_chart(fdate, url):
     chart = [(track_ids[i], titles[i], artists[i], imgs[i]) for i in range(len(titles))]
     res.close()
     return chart
+
+
+# def scrape_weekly_chart(fdate, url):
+#     headers = {
+#         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"
+#     }
+#     res = requests.get(url, headers=headers)
+#     soup = BS(res.content, "html.parser")
+
+#     titles = [title.text.strip() for title in soup.find_all("div", class_="title")]
+#     artists = [artist.text.strip() for artist in soup.find_all("div", class_="artist")]
+#     img_urls = [img["src"] for img in soup.select(".chart img")]
+#     imgs = [img_url.replace("/img/60x60.gif", "/img/album.png") for img_url in img_urls]
+#     ranks = [i for i in range(1, len(titles) + 1)]
+
+#     track_ids = convert_rank_to_track_id(fdate, ranks)
+#     chart = [(track_ids[i], titles[i], artists[i], imgs[i]) for i in range(len(titles))]
+#     res.close()
+#     return chart
 
 
 def convert_rank_to_track_id(fdate, ranks):
