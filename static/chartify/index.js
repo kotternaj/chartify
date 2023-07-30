@@ -135,8 +135,8 @@ function chartDetail() {
                     name = (value['name']),
                     artist = (value['artist']),
                     spot_id = (value['spot_id']),
-                    // img_url = (value['img_url']);
-                    img_url = ('/img/album.png');
+                    img_url = (value['img_url']);
+                // img_url = ('/img/album.png');
                 html_data += `<div class="track-artist-container" value="${rank}"><img class="img_url"
                                     src="${img_url}" onError="this.onerror=null;this.src='/img/album.png';"</img>
                                <div class="track"><b>${name} - (${rank})</b><br/>${artist}</div>

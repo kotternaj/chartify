@@ -2,6 +2,8 @@ from datetime import date, timedelta, datetime
 from ast import literal_eval
 from bs4 import BeautifulSoup as BS
 import os, requests, re, django, pickle, sys
+from ast import literal_eval
+
 
 sys.path.append("/path/to/chartz_project")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "chartz_project.settings")
@@ -10,12 +12,56 @@ from chartify.login import app_login
 from chartify.models import Playlist, Track
 
 
-def main():
+def main2():
     fdate = get_date_today()
     current_chart_url = create_url_from_date(fdate)
     chart = scrape_weekly_chart(fdate, current_chart_url)
     chart = get_track_ids_from_spotify(chart)
     add_pl_and_tracks_to_db(chart, fdate)
+
+
+def main():
+    update_img_urls()
+
+
+def update_img_urls():
+    tracks = Track.objects.all()
+    path = "C:\\Users\\jredd\\PycharmProjects\\spotifyapp\\charts\\new_charts\\txt"
+    chart = read_txt_file(path, "20230618")
+    chart = make_tuple(chart)
+    for track in tracks:
+        for c in chart:
+            if track.track_id == c[0]:
+                track.img_url = c[3]
+                track.save()
+
+    # for entry in chart:
+    #     if entry[0] == tracks.track_id:
+
+
+def read_txt_file(path, filename):
+    if filename[:-4] != ".txt":
+        filename = filename + ".txt"
+    complete_path = os.path.join(path, filename)
+    with open(complete_path, "r") as f:
+        print("opening data: ", complete_path)
+        data = [line.strip() for line in f]
+        # data = [line for line in f]
+    return data
+
+
+def write_to_txt_file(data, path, filename):
+    complete_path = os.path.join(path, filename + ".txt")
+    with open(complete_path, "w", encoding="utf-8") as f:
+        for item in data:
+            f.write(str(item))
+            f.write("\n")
+    print("text file created: ", filename)
+
+
+def make_tuple(data):
+    data = [literal_eval(x) for x in data]
+    return data
 
 
 def add_pl_and_tracks_to_db(chart, fn):
