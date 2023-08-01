@@ -25,26 +25,31 @@ def main():
 
 
 def update_img_urls():
+    all_charts = []
     tracks = Track.objects.all()
-    path = "C:\\Users\\jredd\\PycharmProjects\\spotifyapp\\charts\\new_charts\\txt"
-    chart = read_txt_file(path, "20230618")
-    chart = make_tuple(chart)
-    for track in tracks:
-        for c in chart:
-            if track.track_id == c[0]:
-                track.img_url = c[3]
-                track.save()
+    tpath = "C:\\Users\\jredd\\PycharmProjects\\spotifyapp\\charts\\new_charts\\test"
+    # chart = read_txt_file(path, "19521116")
+    # chart = make_tuple(chart)
+    for txt_file in os.listdir(tpath):
+        data = read_txt_file(tpath, txt_file)
+        chart = make_tuple(data)
+        # all_charts.append(chart)
+        for track in tracks:
+            for c in chart:
+                if track.track_id == c[0]:
+                    track.img_url = c[3]
+                    track.save()
 
     # for entry in chart:
     #     if entry[0] == tracks.track_id:
 
 
 def read_txt_file(path, filename):
-    if filename[:-4] != ".txt":
-        filename = filename + ".txt"
+    # if filename[:-4] != ".txt":
+    #     filename = filename + ".txt"
     complete_path = os.path.join(path, filename)
     with open(complete_path, "r") as f:
-        print("opening data: ", complete_path)
+        # print("opening data: ", complete_path)
         data = [line.strip() for line in f]
         # data = [line for line in f]
     return data
