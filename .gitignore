@@ -67,6 +67,7 @@ local_settings.py
 db.sqlite3
 db.sqlite3-journal
 db - Copy.sqlite3
+db - Copy (2).sqlite3
 
 # Flask stuff:
 instance/

@@ -25,20 +25,52 @@ def main():
 
 
 def update_img_urls():
-    all_charts = []
+    # all_charts = []
+    replace_urls = [
+        "/fallback/artwork-cobalt.svg",
+        "https://m.media-amazon.com/images/I/01RmK+J4pJL._SL500_.gif",
+    ]
+    count = 0
     tracks = Track.objects.all()
-    tpath = "C:\\Users\\jredd\\PycharmProjects\\spotifyapp\\charts\\new_charts\\test"
-    # chart = read_txt_file(path, "19521116")
-    # chart = make_tuple(chart)
-    for txt_file in os.listdir(tpath):
-        data = read_txt_file(tpath, txt_file)
-        chart = make_tuple(data)
-        # all_charts.append(chart)
-        for track in tracks:
-            for c in chart:
-                if track.track_id == c[0]:
-                    track.img_url = c[3]
-                    track.save()
+    for track in tracks:
+        if track.img_url in replace_urls:
+            # if track.img_url[0:38] == "https://d35iaml2i6ojwd.cloudfront.net/":
+            # track.img_url = "/img/album.png"
+            # track.save()
+            print(track.track_id)
+            print(track.name)
+            print(track.img_url)
+            count += 1
+    print(count)
+
+    # for track in tracks:
+    #     if track.img_url in replace_urls:
+    #         track.img_url = "/img/album.png"
+    #         track.save()
+    #         print(track.track_id)
+    #         print(track.name)
+    #         print(track.img_url)
+
+    # tpath = "C:\\Users\\jredd\\PycharmProjects\\spotifyapp\\charts\\new_charts\\emptys"
+    # # chart = read_txt_file(tpath, "redo.txt")
+    # # chart = make_tuple(chart)
+    # # for track in tracks:
+    # #     for c in chart:
+    # #         print(chart)
+    # #         if track.track_id == c[0]:
+    # #             track.img_url = "/img/album.png"
+    # #             track.save()
+
+    # for txt_file in os.listdir(tpath):
+    #     data = read_txt_file(tpath, txt_file)
+    #     chart = make_tuple(data)
+    #     print(chart[0])
+    #     #     # all_charts.append(chart)
+    #     for track in tracks:
+    #         for c in chart:
+    #             if track.track_id == c[0]:
+    #                 track.img_url = c[3]
+    #                 track.save()
 
     # for entry in chart:
     #     if entry[0] == tracks.track_id:

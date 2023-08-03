@@ -115,10 +115,13 @@ function chartDetail() {
     var song_list = [];
     let weekChosen = document.querySelector('#chooseWeek');
     let chart_id = weekChosen.value;
+    console.log('Chart ID: ', chart_id);
     //Next 3 lines recreate the original default playlist name
     let text = weekChosen.options[weekChosen.selectedIndex].text;
+    console.log('Text var: ', text);
     let extractYear = chart_id.slice(0, 4)
     pl_name = extractYear + ' - ' + text;
+    console.log('Playlist name: ', pl_name);
     const url = '/chart_detail';
     $.ajax({
         url: url,
@@ -182,7 +185,7 @@ function getRandomChart() {
 
 //dropdowns
 function chooseWeek() {
-    var year = $('#chooseYear').val();
+    let year = $('#chooseYear').val();
     const url = '/show_weeks';
     $.ajax({
         url: url,
