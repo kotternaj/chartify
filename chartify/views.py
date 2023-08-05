@@ -1,19 +1,16 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
-import random
+import random, os, webbrowser, spotipy
 from requests import Request, post
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
-# from .login import login
 from .models import Playlist
 from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
-import spotipy
 from dotenv import load_dotenv
 from django.http import HttpResponseRedirect, HttpResponse
-import os
-import webbrowser
+
+# from .login import login
 
 load_dotenv()
 CID = os.getenv("CID")
@@ -32,7 +29,6 @@ def add_playlist_to_app(request):
     return redirect("chart")
 
 
-# works
 def login(request):
     sp_oauth = create_spotify_oauth(request)
     url = sp_oauth.get_authorize_url()
@@ -40,7 +36,6 @@ def login(request):
     return redirect(url)
 
 
-# works
 def callback(request):
     global sp, token_info, user_id, sp_oauth
     print("CALLBACK")
@@ -92,13 +87,30 @@ def app_login():
     return sp
 
 
+from time import sleep
+
+
 def random_chart(request):
     playlists = Playlist.objects.all()
     randomPlaylist = random.choice(playlists)
     plid = randomPlaylist.playlist_id
+    print("chart_id: ", plid)
     year = plid[:4]
+    print("year: ", year)
     decade = plid[:3] + "0"
+    print("decade: ", decade)
+    # sleep(1)
     return JsonResponse((plid, decade, year), safe=False)
+
+
+def show_weeks(request):
+    if request.method == "GET":
+        year = request.GET["year"]
+        try:
+            playlists = Playlist.objects.filter(playlist_id__startswith=year)
+        except Exception:
+            print("Error occured in show_weeks view")
+        return JsonResponse(list(playlists.values("playlist_id", "name")), safe=False)
 
 
 def chart_detail(request):
@@ -108,10 +120,10 @@ def chart_detail(request):
             playlist = Playlist.objects.get(pk=playlist_id)
             tracks = playlist.track.all()
         except Exception:
-            data["error_message"] = "error"
-            return JsonResponse(data)
+            print("Error occured in chart_detail view")
+
         data = list(tracks.values("track_id", "name", "artist", "spot_id", "img_url"))
-        print(playlist_id)
+        # print(playlist_id)
         return JsonResponse(data, safe=False)
 
 
@@ -127,16 +139,6 @@ def create_blank_plist(sp, user_id, pl_name):
         if pl["name"] == pl_name:
             pl_id = pl["id"]
     return pl_id
-
-
-def show_weeks(request):
-    if request.method == "GET":
-        year = request.GET["year"]
-        try:
-            playlists = Playlist.objects.filter(playlist_id__startswith=year)
-        except Exception:
-            print("Error occured")
-        return JsonResponse(list(playlists.values("playlist_id", "name")), safe=False)
 
 
 def index(request):

@@ -25,4 +25,4 @@ class TrackAdmin(admin.ModelAdmin):
         "img_url",
     )
     # list_filter = ("artist",)
-    search_fields = ["name", "artist"]
+    search_fields = ["name", "artist", "track_id"]

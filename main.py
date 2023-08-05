@@ -21,7 +21,19 @@ def main2():
 
 
 def main():
-    update_img_urls()
+    # update_img_urls()
+    find_pl_in_db()
+
+
+def find_pl_in_db():
+    plid = "19950820"
+    pl = Playlist.objects.get(pk=plid)
+    # for p in pl:
+    #     print(p)
+    tracks = pl.track.all()
+    for t in tracks:
+        print(t.name)
+        print(t.img_url)
 
 
 def update_img_urls():
@@ -29,51 +41,41 @@ def update_img_urls():
     replace_urls = [
         "/fallback/artwork-cobalt.svg",
         "https://m.media-amazon.com/images/I/01RmK+J4pJL._SL500_.gif",
+        "/fallback/artwork-pink.svg",
     ]
     count = 0
     tracks = Track.objects.all()
     for track in tracks:
         if track.img_url in replace_urls:
             # if track.img_url[0:38] == "https://d35iaml2i6ojwd.cloudfront.net/":
-            # track.img_url = "/img/album.png"
-            # track.save()
+            track.img_url = "/img/album.png"
+            track.save()
             print(track.track_id)
             print(track.name)
             print(track.img_url)
             count += 1
     print(count)
 
-    # for track in tracks:
-    #     if track.img_url in replace_urls:
-    #         track.img_url = "/img/album.png"
-    #         track.save()
-    #         print(track.track_id)
-    #         print(track.name)
-    #         print(track.img_url)
-
     # tpath = "C:\\Users\\jredd\\PycharmProjects\\spotifyapp\\charts\\new_charts\\emptys"
-    # # chart = read_txt_file(tpath, "redo.txt")
-    # # chart = make_tuple(chart)
-    # # for track in tracks:
-    # #     for c in chart:
-    # #         print(chart)
-    # #         if track.track_id == c[0]:
-    # #             track.img_url = "/img/album.png"
-    # #             track.save()
+    # chart = read_txt_file(tpath, "redo.txt")
+    # chart = make_tuple(chart)
+    # for track in tracks:
+    #     for c in chart:
+    #         print(chart)
+    #         if track.track_id == c[0]:
+    #             track.img_url = "/img/album.png"
+    #             track.save()
 
     # for txt_file in os.listdir(tpath):
     #     data = read_txt_file(tpath, txt_file)
     #     chart = make_tuple(data)
     #     print(chart[0])
-    #     #     # all_charts.append(chart)
+    #     all_charts.append(chart)
     #     for track in tracks:
     #         for c in chart:
     #             if track.track_id == c[0]:
     #                 track.img_url = c[3]
     #                 track.save()
-
-    # for entry in chart:
-    #     if entry[0] == tracks.track_id:
 
 
 def read_txt_file(path, filename):
@@ -81,9 +83,7 @@ def read_txt_file(path, filename):
     #     filename = filename + ".txt"
     complete_path = os.path.join(path, filename)
     with open(complete_path, "r") as f:
-        # print("opening data: ", complete_path)
         data = [line.strip() for line in f]
-        # data = [line for line in f]
     return data
 
 

@@ -10,11 +10,6 @@ var chart_data = {}, dump = {};
 var pl_name = '';
 var new_name = '';
 
-createPL = document.getElementById('createPL');
-createPL.addEventListener('click', editPlaylistName);
-createPL2 = document.getElementById('createPL2');
-createPL2.addEventListener('click', editPlaylistName);
-
 
 // 6. Add Playlist to Spotify
 function addPlaylistToApp() {
@@ -112,7 +107,6 @@ function deSelectTracks() {
 
 // 3. Render chart
 function chartDetail() {
-    var song_list = [];
     let weekChosen = document.querySelector('#chooseWeek');
     let chart_id = weekChosen.value;
     console.log('Chart ID: ', chart_id);
@@ -121,7 +115,6 @@ function chartDetail() {
     console.log('Text var: ', text);
     let extractYear = chart_id.slice(0, 4)
     pl_name = extractYear + ' - ' + text;
-    console.log('Playlist name: ', pl_name);
     const url = '/chart_detail';
     $.ajax({
         url: url,
@@ -130,16 +123,14 @@ function chartDetail() {
         dataType: 'json',
         success: function (data) {
             chart_data = data;
-            // c(chart_data)
             let html_data = '';
             for (const [key, value] of Object.entries(data)) {
-                let track_id = (value['track_id']),
-                    rank = (parseInt(value['track_id'].slice(8,), 10)),
+                // let track_id = (value['track_id']),
+                let rank = (parseInt(value['track_id'].slice(8,), 10)),
                     name = (value['name']),
                     artist = (value['artist']),
                     spot_id = (value['spot_id']),
                     img_url = (value['img_url']);
-                // img_url = ('/img/album.png');
                 html_data += `<div class="track-artist-container" value="${rank}"><img class="img_url"
                                     src="${img_url}" onError="this.onerror=null;this.src='/img/album.png';"</img>
                                <div class="track"><b>${name} - (${rank})</b><br/>${artist}</div>
@@ -152,10 +143,11 @@ function chartDetail() {
 }
 
 // 2. Show random chart
-function showRandomChart(plid, decade, year, song_count) {
+function showRandomChart(plid, decade, year) {
+    c('showRandomChart')
     $('#chooseDecade').val(decade).change();
     $('#chooseYear').val(year).change();
-    setTimeout(function () { $('#chooseWeek').val(plid).change() }, 100);
+    setTimeout(function () { $('#chooseWeek').val(plid).change() }, 300);
 }
 
 // 1. Fetch random chart from db    
@@ -169,11 +161,9 @@ function getRandomChart() {
         dataType: 'json',
         cache: false,
         success: function (data) {
-            // c(data)
             plid = data[0];
             decade = data[1];
             year = data[2];
-            // song_count = data[3];
             showRandomChart(plid, decade, year);
         },
         error: function (response) {
@@ -185,6 +175,7 @@ function getRandomChart() {
 
 //dropdowns
 function chooseWeek() {
+    c('chooseWeek')
     let year = $('#chooseYear').val();
     const url = '/show_weeks';
     $.ajax({
@@ -193,12 +184,14 @@ function chooseWeek() {
         data: { 'year': year },
         dataType: 'json',
         success: function (data) {
+            pl_name = 'name';
             let html_data = '';
             data.forEach(function (data) {
                 html_data += `<option
     value="${data.playlist_id}">${data.name.slice(7,)}</option>`
             });
-            $("#chooseWeek").html(html_data).change();
+            // $("#chooseWeek").html(html_data).change();
+            $("#chooseWeek").html(html_data);
         },
         error: function (response) {
             alert("Error getting data")
@@ -207,18 +200,19 @@ function chooseWeek() {
 }
 
 function chooseYear() {
+    c('chooseYear')
     let decade = document.querySelector('#chooseDecade').value,
         select = document.querySelector('#chooseYear');
     decadeChoice = parseInt(decade);
     decade = parseInt(decade);
     select.options.length = 0;
-    var yearsArray = new Array();
+    let yearsArray = new Array();
     for (var i = 0; i < 10; i++) {
         yearsArray.push(decade)
         decade = decade + 1;
     }
     for (var i = 0; i < yearsArray.length; i++) {
-        var option = document.createElement('option');
+        let option = document.createElement('option');
         option.innerHTML = yearsArray[i];
         option.value = yearsArray[i];
         if (option.value < 1952 || option.value > 2023) {
@@ -235,11 +229,13 @@ function chooseYear() {
         year = yearsArray[0]
     }
 
-    $('#chooseYear').val(year).change();
+    // $('#chooseYear').val(year).change();
+    // setTimeout(function () { $('#chooseYear').val(year).change() }, 100);
 
 }
 
 function chooseDecade() {
+    console.log('chooseDecade')
     decades = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
     let decade = document.querySelector('#chooseYear').value,
         select = document.querySelector('#chooseDecade');
