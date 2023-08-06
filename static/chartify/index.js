@@ -184,8 +184,8 @@ function chooseWeek() {
                 html_data += `<option
     value="${data.playlist_id}">${data.name.slice(7,)}</option>`
             });
-            // $("#chooseWeek").html(html_data).change();
-            $("#chooseWeek").html(html_data);
+            $("#chooseWeek").html(html_data).change();
+            // $("#chooseWeek").html(html_data);
         },
         error: function (response) {
             alert("Error getting data")
@@ -222,12 +222,14 @@ function chooseYear() {
     else {
         year = yearsArray[0]
     }
-    // $('#chooseYear').val(year).change();
+
+    // $('#chooseYear').val(select).change();
+    // $('#chooseYear').change();
     // setTimeout(function () { $('#chooseYear').val(year).change() }, 100);
 }
 
 function chooseDecade() {
-    console.log('chooseDecade')
+    console.log('chooseDecade happens upon page load')
     decades = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
     let decade = document.querySelector('#chooseYear').value,
         select = document.querySelector('#chooseDecade');
@@ -237,4 +239,5 @@ function chooseDecade() {
         option.value = decades[i];
         select.appendChild(option);
     }
+    // $('#chooseYear').val(select).change();
 }

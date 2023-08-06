@@ -23,7 +23,8 @@ def main2():
 def main():
     # update_img_urls()
     # find_pl_in_db()
-    add_s_to_http_img_urls()
+    # add_s_to_http_img_urls()
+    count_http()
 
 
 def find_pl_in_db():
@@ -36,18 +37,30 @@ def find_pl_in_db():
     return tracks
 
 
+def count_http():
+    tracks = Track.objects.all()
+    http = [t for t in tracks if t.img_url[0:5] == "http:"]
+    https = [t for t in tracks if t.img_url[0:6] == "https:"]
+    default = [t for t in tracks if t.img_url == "/img/album.png"]
+    print(f"{len(http)}  - {len(https)}  -  {len(default)}")
+
+
 def add_s_to_http_img_urls():
-    tracks = find_pl_in_db()
-    print(len(tracks))
+    # tracks = find_pl_in_db()
+    # print(len(tracks))
+    count = 0
+    tracks = Track.objects.all()
     # [print(t.img_url) for t in tracks]
     for track in tracks:
         if track.img_url[0:5] == "http:":
-            print(track)
+            # print(track)
             track.img_url = track.img_url.replace(":", "s:")
             # track.img_url.replace(":", "s:")
             track.save()
+            count += 1
+    print(count)
     # [
-    #     track.img_url.replace(":", "s:").save()
+    #     track.save(track.img_url.replace(":", "s:"))
     #     for track in tracks
     #     if track.img_url[0:5] == "http:"
     # ]
