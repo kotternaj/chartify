@@ -24,7 +24,8 @@ def main():
     # update_img_urls()
     # find_pl_in_db()
     # add_s_to_http_img_urls()
-    count_http()
+    # count_http()
+    get_all_img_urls()
 
 
 def find_pl_in_db():
@@ -43,6 +44,30 @@ def count_http():
     https = [t for t in tracks if t.img_url[0:6] == "https:"]
     default = [t for t in tracks if t.img_url == "/img/album.png"]
     print(f"{len(http)}  - {len(https)}  -  {len(default)}")
+
+
+def get_all_img_urls():
+    album_art_dir = "C:\\Users\\jredd\\Desktop\\code\\chartz\\album_art"
+    tracks = Track.objects.all()
+    all_img_urls = [(t.track_id, t.img_url) for t in tracks]
+    write_to_txt_file(all_img_urls, album_art_dir, "all_img_urls")
+    print(all_img_urls[0:3])
+    print(len(all_img_urls))
+
+
+def download_imgs(urls):
+    # urls = ["http://localhost:8000/img/album.png"]
+    album_art_dir = "C:\\Users\\jredd\\Desktop\\code\\chartz\\album_art"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"
+    }
+
+    for url in urls:
+        # res = requests.get(url, stream=True)
+        res = requests.get(url, headers=headers, stream=True)
+        res.raw.decode_content = True
+        with open(album_art_dir, "wb") as f:
+            f.write(res.content)
 
 
 def add_s_to_http_img_urls():
