@@ -77,19 +77,15 @@ function deSelectTracks() {
     // c(chart_data)
     document.querySelectorAll(".track-artist-container").forEach(item => {
         item.addEventListener('click', event => {
-            // let value = item.getAttribute('value');
-
             let value = Number(item.getAttribute('value') - 1);
             if (value in chart_data) {
                 dump[value] = chart_data[value];
                 delete (chart_data[value]);
                 console.log('Song removed. # of songs in dict: ', Object.keys(chart_data).length);
-                // c(chart_data)
             } else {
                 chart_data[value] = dump[value];
                 delete (dump[value]);
                 console.log('Song added. # of songs in dict: ', Object.keys(chart_data).length);
-                // c(chart_data)
             }
             console.log('clicked value: ', value);
             const style = getComputedStyle(item);
@@ -125,11 +121,9 @@ function chartDetail() {
             chart_data = data;
             let html_data = '';
             for (const [key, value] of Object.entries(data)) {
-                // let track_id = (value['track_id']),
                 let rank = (parseInt(value['track_id'].slice(8,), 10)),
                     name = (value['name']),
                     artist = (value['artist']),
-                    spot_id = (value['spot_id']),
                     img_url = (value['img_url']);
                 html_data += `<div class="track-artist-container" value="${rank}"><img class="img_url"
                                     src="${img_url}" onError="this.onerror=null;this.src='/img/album.png';"</img>
@@ -228,10 +222,8 @@ function chooseYear() {
     else {
         year = yearsArray[0]
     }
-
     // $('#chooseYear').val(year).change();
     // setTimeout(function () { $('#chooseYear').val(year).change() }, 100);
-
 }
 
 function chooseDecade() {

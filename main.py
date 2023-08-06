@@ -22,18 +22,35 @@ def main2():
 
 def main():
     # update_img_urls()
-    find_pl_in_db()
+    # find_pl_in_db()
+    add_s_to_http_img_urls()
 
 
 def find_pl_in_db():
-    plid = "19950820"
+    plid = "19820905"
     pl = Playlist.objects.get(pk=plid)
-    # for p in pl:
-    #     print(p)
     tracks = pl.track.all()
-    for t in tracks:
-        print(t.name)
-        print(t.img_url)
+    # for t in tracks:
+    #     print(t.name)
+    #     print(t.img_url)
+    return tracks
+
+
+def add_s_to_http_img_urls():
+    tracks = find_pl_in_db()
+    print(len(tracks))
+    # [print(t.img_url) for t in tracks]
+    for track in tracks:
+        if track.img_url[0:5] == "http:":
+            print(track)
+            track.img_url = track.img_url.replace(":", "s:")
+            # track.img_url.replace(":", "s:")
+            track.save()
+    # [
+    #     track.img_url.replace(":", "s:").save()
+    #     for track in tracks
+    #     if track.img_url[0:5] == "http:"
+    # ]
 
 
 def update_img_urls():
