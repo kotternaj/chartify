@@ -25,7 +25,8 @@ def main():
     # find_pl_in_db()
     # add_s_to_http_img_urls()
     # count_http()
-    get_all_img_urls()
+    # get_all_img_urls()
+    download_imgs()
 
 
 def find_pl_in_db():
@@ -55,19 +56,30 @@ def get_all_img_urls():
     print(len(all_img_urls))
 
 
-def download_imgs(urls):
+def download_imgs():
     # urls = ["http://localhost:8000/img/album.png"]
     album_art_dir = "C:\\Users\\jredd\\Desktop\\code\\chartz\\album_art"
+    all_img_urls = read_txt_file(album_art_dir, "all_img_urls.txt")
+    urls = make_tuple(all_img_urls)
+    # print(all_img_urls[0])
+    # print(all_img_urls[-1])
+    # print(len(all_img_urls))
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"
     }
+    test = urls[0:2]
+    # test = make_tuple(test)
+    # for t in test:
+    #     print(t[1])
 
-    for url in urls:
-        # res = requests.get(url, stream=True)
-        res = requests.get(url, headers=headers, stream=True)
+    for url in test:
+        # res = requests.get(url[0], stream=True)
+        fn = url[0]
+        res = requests.get(url[1], headers=headers, stream=True)
         res.raw.decode_content = True
-        with open(album_art_dir, "wb") as f:
+        with open(f"album_art/{fn}.jpg", "wb") as f:
             f.write(res.content)
+            res.close()
 
 
 def add_s_to_http_img_urls():
