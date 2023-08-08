@@ -3,7 +3,7 @@ from ast import literal_eval
 from bs4 import BeautifulSoup as BS
 import os, requests, re, django, pickle, sys
 from ast import literal_eval
-
+from time import sleep
 
 sys.path.append("/path/to/chartz_project")
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "chartz_project.settings")
@@ -51,35 +51,49 @@ def get_all_img_urls():
     album_art_dir = "C:\\Users\\jredd\\Desktop\\code\\chartz\\album_art"
     tracks = Track.objects.all()
     all_img_urls = [(t.track_id, t.img_url) for t in tracks]
-    write_to_txt_file(all_img_urls, album_art_dir, "all_img_urls")
+    # all_img_urls = [(tid, t[1].replace("/img/album.png", "http://localhost:8000/img/album.png") for t in all_img_urls)]
+    fn = "all_img_urls"
+    write_to_txt_file(all_img_urls, album_art_dir, fn)
     print(all_img_urls[0:3])
     print(len(all_img_urls))
 
+    # data = read_txt_file(album_art_dir, fn)
+    # urls = make_tuple(all_img_urls)
+    # for d in urls[1][1]:
+    #     print(d)
+
 
 def download_imgs():
-    # urls = ["http://localhost:8000/img/album.png"]
+    default_url = "http://localhost:8000/img/album.png"
     album_art_dir = "C:\\Users\\jredd\\Desktop\\code\\chartz\\album_art"
     all_img_urls = read_txt_file(album_art_dir, "all_img_urls.txt")
     urls = make_tuple(all_img_urls)
-    # print(all_img_urls[0])
-    # print(all_img_urls[-1])
-    # print(len(all_img_urls))
+
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246"
     }
-    test = urls[0:2]
-    # test = make_tuple(test)
-    # for t in test:
-    #     print(t[1])
 
-    for url in test:
-        # res = requests.get(url[0], stream=True)
+    # urls = [("19860405992", "/img/album.png")]
+    count = 0
+    for url in urls:
         fn = url[0]
-        res = requests.get(url[1], headers=headers, stream=True)
-        res.raw.decode_content = True
+        if url[1] == "/img/album.png":
+            res = requests.get(default_url, stream=True)
+        else:
+            res = requests.get(url[1], headers=headers, stream=True)
+            res.raw.decode_content = True
         with open(f"album_art/{fn}.jpg", "wb") as f:
             f.write(res.content)
             res.close()
+            count += 1
+        if count % 100 == 0:
+            print("Sleeping. Count is: ", count)
+            print("file: ", fn)
+            sleep(10)
+        if count % 1000 == 0:
+            print("Sleeping. Count is: ", count)
+            print("file: ", fn)
+            sleep(10)
 
 
 def add_s_to_http_img_urls():

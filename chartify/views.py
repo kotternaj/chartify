@@ -53,7 +53,8 @@ def callback(request):
     user_id = sp.current_user()["id"]
     # else:
     #     refresh()
-    return redirect("chart")
+    return redirect("index")
+    # return redirect("chart")
     # return render(request, "home.html", {})
 
 

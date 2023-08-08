@@ -33,9 +33,13 @@
 
     {% block topLogInBtn %}
     <div class="button-container">
-        <div><button id='loginBtn' type="button" class='btn btn-primary'><a class="loginLink"
-                    href="{% url 'login' %}">Log into Spotify to Create Playlist
-                </a>
+        <div><button id='loginBtn' type="button" class='btn btn-primary' onclick="login()">Log into Spotify to Create
+                Playlist
+            </button>
+        </div>
+        <div><button id='createPL' type="button" class='btn btn-primary'>Create
+                Playlist in
+                Spotify
             </button>
         </div>
     </div>
@@ -48,13 +52,24 @@
             <span class="close">&times;</span>
             <div class="text">
                 <p class="customPLname">Customize playlist name or use default shown:</p>
-            </div>div>
+            </div>
             <div class="input-group mb-3">
                 <input type="text" id='nameInput' class="form-control" placeholder="" aria-label=""
                     aria-describedby="basic-addon1">
             </div>
             <div class="input-group-prepend">
                 <button id='editNameBtn' class="btn btn-outline-secondary" type="button">Submit</button>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+
+    {% block confirmationModal %}
+    <div id="confirmationModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div class="confirm-text">
+                <p id="msg">Playlist Added</p>
             </div>
         </div>
     </div>

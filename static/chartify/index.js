@@ -10,6 +10,39 @@ var chart_data = {}, dump = {};
 var pl_name = '';
 var new_name = '';
 
+createPL = document.getElementById('createPL');
+createPL.addEventListener('click', editPlaylistName);
+createPL2 = document.getElementById('createPL2');
+createPL2.addEventListener('click', editPlaylistName);
+
+// loginBtn = document.getElementById('loginBtn');
+// loginBtn.addEventListener('click', login);
+
+function login() {
+    const url = '/login';
+    console.log('JS LOGIN()');
+    $.ajax({
+        url: url,
+        type: 'GET',
+    });
+}
+
+function confirmationModal() {
+    var modal = document.getElementById("confirmationModal");
+    modal.style.display = "block";
+
+    var span = document.getElementsByClassName("close")[0];
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+
+}
 
 // 6. Add Playlist to Spotify
 function addPlaylistToApp() {
@@ -24,15 +57,13 @@ function addPlaylistToApp() {
         type: 'GET',
         data: {
             'spot_ids': spot_ids,
-            // 'spot_ids': JSON.stringify(spot_ids),
-            // 'chart_data': JSON.stringify(chart_data),
-            'pl_name': pl_name,
+            'pl_name': new_name,
         },
         url: url,
         success: function () {
             var modal = document.getElementById("editPlaylistName");
             modal.style.display = "none";
-            // alert('Success')
+            confirmationModal();
         },
         error: function (response) {
             alert('Error')
@@ -55,6 +86,7 @@ function editPlaylistName() {
         if (new_name.length == 0) {
             new_name = pl_name;
         }
+        console.log('name: ', new_name);
         addPlaylistToApp(chart_data, new_name);
     });
 
