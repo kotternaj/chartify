@@ -1,22 +1,124 @@
 var c = function () {
     console.log.apply(console, arguments);
 }
-window.onload = function () {
-    getRandomChart();
-    chooseDecade();
-}
+
 // GLOBAL VARS
 var chart_data = {}, dump = {};
 var pl_name = '';
 var new_name = '';
+// var chart_id = '';
+// var charts = [];
+// var recent_chart = "19880925";
+// var recent_chart = '';
+// var chart_id = '19880925';
+var plid = '';
 
-createPL = document.getElementById('createPL');
+window.onload = function () {
+    // c('ChartID on page load: ', chart_id)
+    // if (chart_id) {
+    //     // c('Chart_id exists, pulling THAT chart')
+    //     showRandomChart(chart_id);
+    // }
+    // else {
+    //     // c('Onload getRandomChart()')
+    //     getRandomChart();
+    // }
+    showDecades();
+    getRandomChart();
+    // recent_chart = getRecentChart();
+
+
+}
+
+// createPL = document.getElementById('createPL');
 createPL.addEventListener('click', editPlaylistName);
+// createPL.addEventListener('click', confirmationModal);
 createPL2 = document.getElementById('createPL2');
 createPL2.addEventListener('click', editPlaylistName);
 
 // loginBtn = document.getElementById('loginBtn');
 // loginBtn.addEventListener('click', login);
+
+function getRecentChart() {
+    if (recent_chart !== '') {
+        recent_chart = recent_chart;
+        console.log('Recent chart is NOT empty. recent_chart = ', recent_chart)
+        return recent_chart;
+    }
+    else {
+        // recent_chart = '';
+        // console.log('recent chart is empty. recent =  ', recent_chart)
+        return recent_chart;
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+function getRandomChart() {
+    let plid = '';
+    const url = '/random_chart';
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: { 'plid': plid },
+        dataType: 'json',
+        cache: false,
+        success: function (data) {
+            plid = data[0];
+            decade = data[1];
+            year = data[2];
+            showRandomChart(plid, decade, year);
+        },
+        error: function (response) {
+            alert("Error getting data")
+        },
+    });
+}
+
+function showRandomChart(plid, decade, year) {
+    $('#chooseDecade').val(decade).change();
+    $('#chooseYear').val(year).change();
+    setTimeout(() => { $('#chooseWeek').val(plid).change(); }, 100);
+}
+
+function chartDetail() {
+    let chart = document.querySelector('#chooseWeek').value;
+    const url = '/chart_detail';
+    $.ajax({
+        url: url,
+        type: 'GET',
+        data: { 'chart': chart },
+        dataType: 'json',
+        success: function (data) {
+            chart_data = data[0];
+            pl_name = data[1];
+            let html_data = '';
+            for (const [key, value] of Object.entries(chart_data)) {
+                let rank = (parseInt(value['track_id'].slice(8,), 10)),
+                    name = (value['name']),
+                    artist = (value['artist']),
+                    img_url = (value['img_url']);
+                html_data += `<div class="track-artist-container" value="${rank}"><img class="img_url"
+                                    src="${img_url}" onError="this.onerror=null;this.src='/img/album.png';"</img>
+                               <div class="track"><b>${name} - (${rank})</b><br/>${artist}</div>
+                         </div>`
+            }
+            $("#showChart").html(html_data);
+            deSelectTracks();
+        },
+    });
+}
+
+/////////////////////////////////////////////////////////////////////////////////
+
+function test() {
+    const url = '/test';
+    console.log('Test Redirect()');
+    $.ajax({
+        url: url,
+        type: 'GET',
+    });
+}
 
 function login() {
     const url = '/login';
@@ -27,12 +129,32 @@ function login() {
     });
 }
 
+// save recent_chart then log into Spotify
+// function login2() {
+//     const url = '/save_recent_chart';
+//     c('chartidbefore ajax send: ', chart_id)
+//     $.ajax({
+//         url: url,
+//         type: 'GET',
+//         data: { 'recent_chart': chart_id },
+//         success: function (data) {
+//             c('Ajax data recnt chrt: ', data)
+//             const url = '/login';
+//             console.log('JS LOGIN()');
+//             $.ajax({
+//                 url: url,
+//                 type: 'GET',
+//             });
+//         }
+//     });
+// }
+
 function confirmationModal() {
     var modal = document.getElementById("confirmationModal");
     modal.style.display = "block";
 
-    var span = document.getElementsByClassName("close")[0];
-    span.onclick = function () {
+    var div = document.getElementsByClassName("conf-modal-content")[0]
+    div.onclick = function () {
         modal.style.display = "none";
     }
 
@@ -41,7 +163,7 @@ function confirmationModal() {
             modal.style.display = "none";
         }
     }
-
+    getRandomChart();
 }
 
 // 6. Add Playlist to Spotify
@@ -86,7 +208,7 @@ function editPlaylistName() {
         if (new_name.length == 0) {
             new_name = pl_name;
         }
-        console.log('name: ', new_name);
+        console.log('new_name: ', new_name);
         addPlaylistToApp(chart_data, new_name);
     });
 
@@ -133,76 +255,11 @@ function deSelectTracks() {
     })
 }
 
-// 3. Render chart
-function chartDetail() {
-    let weekChosen = document.querySelector('#chooseWeek');
-    let chart_id = weekChosen.value;
-    console.log('Chart ID: ', chart_id);
-    //Next 3 lines recreate the original default playlist name
-    let text = weekChosen.options[weekChosen.selectedIndex].text;
-    console.log('Text var: ', text);
-    let extractYear = chart_id.slice(0, 4)
-    pl_name = extractYear + ' - ' + text;
-    const url = '/chart_detail';
-    $.ajax({
-        url: url,
-        type: 'GET',
-        data: { 'chart_id': chart_id },
-        dataType: 'json',
-        success: function (data) {
-            chart_data = data;
-            let html_data = '';
-            for (const [key, value] of Object.entries(data)) {
-                let rank = (parseInt(value['track_id'].slice(8,), 10)),
-                    name = (value['name']),
-                    artist = (value['artist']),
-                    img_url = (value['img_url']);
-                html_data += `<div class="track-artist-container" value="${rank}"><img class="img_url"
-                                    src="${img_url}" onError="this.onerror=null;this.src='/img/album.png';"</img>
-                               <div class="track"><b>${name} - (${rank})</b><br/>${artist}</div>
-                         </div>`
-            }
-            $("#showChart").html(html_data);
-            deSelectTracks();
-        },
-    });
-}
-
-// 2. Show random chart
-function showRandomChart(plid, decade, year) {
-    c('showRandomChart')
-    $('#chooseDecade').val(decade).change();
-    $('#chooseYear').val(year).change();
-    setTimeout(function () { $('#chooseWeek').val(plid).change() }, 300);
-}
-
-// 1. Fetch random chart from db    
-function getRandomChart() {
-    let plid = '';
-    const url = '/random_chart';
-    $.ajax({
-        url: url,
-        type: 'GET',
-        data: { 'plid': plid },
-        dataType: 'json',
-        cache: false,
-        success: function (data) {
-            plid = data[0];
-            decade = data[1];
-            year = data[2];
-            showRandomChart(plid, decade, year);
-        },
-        error: function (response) {
-            alert("Error getting data")
-        },
-    });
-}
-
 
 //dropdowns
-function chooseWeek() {
-    c('chooseWeek')
-    let year = $('#chooseYear').val();
+function chooseYear() {
+    let year = document.querySelector('#chooseYear').value;
+    // c('chooseYear(). Value of year ', year)
     const url = '/show_weeks';
     $.ajax({
         url: url,
@@ -225,13 +282,17 @@ function chooseWeek() {
     });
 }
 
-function chooseYear() {
-    c('chooseYear')
-    let decade = document.querySelector('#chooseDecade').value,
-        select = document.querySelector('#chooseYear');
-    decadeChoice = parseInt(decade);
-    decade = parseInt(decade);
-    select.options.length = 0;
+function chooseDecade() {
+    let decade = parseInt(document.querySelector('#chooseDecade').value),
+        year = document.querySelector('#chooseYear');
+
+    // setTimeout(() => { $('#chooseYear').val(decade).change(); }, 100);
+    // $('#chooseYear').val(decade).change();
+    // chooseYear(decade)
+    // decade = parseInt(decade);
+    // decades = parseInt(decade);
+    // c('chooseDecade(). Decade ', decade)
+    year.options.length = 0;
     let yearsArray = new Array();
     for (var i = 0; i < 10; i++) {
         yearsArray.push(decade)
@@ -245,31 +306,31 @@ function chooseYear() {
             option.remove()
         }
         else {
-            select.appendChild(option);
+            year.appendChild(option);
         }
     }
-    if (decadeChoice == 1950) {
-        year = yearsArray[2]
-    }
-    else {
-        year = yearsArray[0]
-    }
+    // if (decade == 1950) {
+    //     let year = yearsArray[2]
 
-    // $('#chooseYear').val(select).change();
-    // $('#chooseYear').change();
-    // setTimeout(function () { $('#chooseYear').val(year).change() }, 100);
+    // }
+    // else {
+    //     let year = yearsArray[0]
+    // }
+
+    // year = yearsArray[0];
+    // setTimeout(() => { $('#chooseYear').val(year).change(); }, 100);
+    // $('#chooseYear').val(decade).change();
 }
 
-function chooseDecade() {
-    console.log('chooseDecade happens upon page load')
-    decades = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
-    let decade = document.querySelector('#chooseYear').value,
-        select = document.querySelector('#chooseDecade');
+function showDecades() {
+    let decades = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
+    // let decade = document.querySelector('#chooseYear').value,
+    let decadeSelect = document.querySelector('#chooseDecade');
     for (var i = 0; i < decades.length; i++) {
         var option = document.createElement('option');
         option.innerHTML = decades[i] + "'s";
         option.value = decades[i];
-        select.appendChild(option);
+        decadeSelect.appendChild(option);
     }
-    // $('#chooseYear').val(select).change();
+    // $('#chooseYear').val(decadeSelect).change();
 }

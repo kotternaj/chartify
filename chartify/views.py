@@ -1,16 +1,9 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect
 import random, os, webbrowser, spotipy
-from requests import Request, post
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from .models import Playlist
 from spotipy.oauth2 import SpotifyOAuth, SpotifyClientCredentials
 from dotenv import load_dotenv
-from django.http import HttpResponseRedirect, HttpResponse
-
-# from .login import login
 
 load_dotenv()
 CID = os.getenv("CID")
@@ -26,7 +19,13 @@ def add_playlist_to_app(request):
         pl_name = request.GET["pl_name"]
     pl_id = create_blank_plist(sp, user_id, pl_name)
     populate_playlist(sp, user_id, pl_id, spot_ids)
-    return redirect("chart")
+    return redirect("index")
+
+
+def save_recent_chart(request):
+    if request.method == "GET":
+        chart = request.GET["chart"]
+    return JsonResponse(chart, safe=False)
 
 
 def login(request):
@@ -38,24 +37,13 @@ def login(request):
 
 def callback(request):
     global sp, token_info, user_id, sp_oauth
-    print("CALLBACK")
     sp_oauth = create_spotify_oauth(request)
-    # token_info = sp_oauth.get_cached_token()
-    # if not token_info:
     code = request.GET.get("code")
     token_info = sp_oauth.get_access_token(code)
     token = token_info["access_token"]
-    # request.session["access_token"] = access_token
     sp = spotipy.Spotify(auth=token)
-    # sp = spotipy.Spotify(
-    #     auth=token_info["access_token"], requests_timeout=25, requests_session=True
-    # )
     user_id = sp.current_user()["id"]
-    # else:
-    #     refresh()
-    return redirect("index")
-    # return redirect("chart")
-    # return render(request, "home.html", {})
+    return redirect("chart")
 
 
 # def refresh():
@@ -88,20 +76,15 @@ def app_login():
     return sp
 
 
-from time import sleep
-
-
 def random_chart(request):
-    playlists = Playlist.objects.all()
-    randomPlaylist = random.choice(playlists)
-    plid = randomPlaylist.playlist_id
-    print("chart_id: ", plid)
-    year = plid[:4]
-    print("year: ", year)
-    decade = plid[:3] + "0"
-    print("decade: ", decade)
-    # sleep(1)
-    return JsonResponse((plid, decade, year), safe=False)
+    if request.method == "GET":
+        plid = request.GET["plid"]
+        playlists = Playlist.objects.all()
+        randomPlaylist = random.choice(playlists)
+        plid = randomPlaylist.playlist_id
+        year = plid[:4]
+        decade = plid[:3] + "0"
+        return JsonResponse((plid, decade, year), safe=False)
 
 
 def show_weeks(request):
@@ -119,12 +102,14 @@ def chart_detail(request):
         playlist_id = request.GET["chart_id"]
         try:
             playlist = Playlist.objects.get(pk=playlist_id)
+            pl_name = playlist.name
             tracks = playlist.track.all()
         except Exception:
             print("Error occured in chart_detail view")
-
-        data = list(tracks.values("track_id", "name", "artist", "spot_id", "img_url"))
-        # print(playlist_id)
+        data = (
+            list(tracks.values("track_id", "name", "artist", "spot_id", "img_url")),
+            pl_name,
+        )
         return JsonResponse(data, safe=False)
 
 
@@ -148,7 +133,3 @@ def index(request):
 
 def chart(request):
     return render(request, "chart.html", {})
-
-
-def splash(request):
-    return render(request, "splash.html", {})

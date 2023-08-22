@@ -14,6 +14,11 @@ p {
     /* margin-bottom: 2rem; */
 }
 
+.customPLname {
+    font-size: 15px;
+    color: white;
+    height: 20px;
+}
 
 /*  DROPDOWNS ********************* */
 .form-select {
@@ -175,6 +180,10 @@ button {
         margin-right: 3px;
     }
 
+    .conf-modal-content {
+        width: auto;
+    }
+
     #showChart {
         display: grid;
         grid-template-columns: 50% 50%;
@@ -201,7 +210,8 @@ button {
         border-radius: 50px;
     }
 
-    .modal-content {
+    .modal-content,
+    .conf-modal-content {
         width: 60%;
     }
 
@@ -215,6 +225,16 @@ button {
         display: grid;
         grid-template-columns: 33% 33% 33%;
         gap: .5rem;
+    }
+
+    .confirm-text {
+        margin-top: 5px;
+        margin-bottom: 45px;
+        font-size: 20px;
+    }
+
+    .conf-modal-content {
+        width: 500px;
     }
 
     .modal-content {
@@ -245,6 +265,12 @@ button {
         justify-content: center;
         height: 100px;
         border-radius: 50px;
+    }
+
+    .confirm-text {
+        margin-top: 5px;
+        margin-bottom: 45px;
+        font-size: 20px;
     }
 
     .modal-content {
@@ -315,7 +341,8 @@ button {
 }
 
 /* Modal Content/Box */
-.modal-content {
+.modal-content,
+.conf-modal-content {
     background-color: black;
     margin: 15% auto;
     border: 1px solid #717171;
@@ -361,12 +388,12 @@ button {
     background-color: grey;
 }
 
-option {
+/* .option {
 
     text-align: left;
     background-color: #434343;
-    color: white;
-}
+    color: red;
+} */
 
 .input-group {
     width: 80%;
@@ -390,9 +417,9 @@ a :hover {
 }
 
 .confirm-text {
-    margin-top: 0px;
-    margin-bottom: 40px;
-    font-size: 30px;
+    margin-top: 5px;
+    margin-bottom: 45px;
+    /* font-size: 13px; */
 }
 
 /* #loginBtn :hover {

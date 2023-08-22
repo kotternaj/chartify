@@ -4,22 +4,19 @@
 <div class="container">
     {% block header %}
     <div class="header">
-        Chartify
+        Chartle
     </div>
     {% endblock %}
 
     {% block dropdowns %}
     <div class="dropdown-container">
-        <select id='chooseDecade' name='chooseDecade' class="form-select" aria-label="Default select example"
-            onchange="chooseYear()">
+        <select id='chooseDecade' class="form-select" aria-label="Default select example" onchange="chooseDecade()">
         </select>
 
-        <select id='chooseYear' name='chooseYear' class="form-select" aria-label="Default select example"
-            onchange="chooseWeek()">
+        <select id='chooseYear' class="form-select" aria-label="Default select example" onchange="chooseYear()">
         </select>
 
-        <select id='chooseWeek' name='chooseWeek' class="form-select" aria-label="Default select example"
-            onchange="chartDetail()">
+        <select id='chooseWeek' class="form-select" aria-label="Default select example" onchange="chartDetail()">
         </select>
 
         <div class="or">
@@ -33,7 +30,7 @@
 
     {% block topLogInBtn %}
     <div class="button-container">
-        <div><button id='loginBtn' type="button" class='btn btn-primary' onclick="login()">Log into Spotify to Create
+        <div><button id='loginBtn' type="button" class='btn btn-primary' onclick="test()">Log into Spotify to Create
                 Playlist
             </button>
         </div>
@@ -66,10 +63,10 @@
 
     {% block confirmationModal %}
     <div id="confirmationModal" class="modal">
-        <div class="modal-content">
+        <div class="conf-modal-content">
             <span class="close">&times;</span>
             <div class="confirm-text">
-                <p id="msg">Playlist Added</p>
+                <p id="msg">Playlist created! Check your Spotify library.</p>
             </div>
         </div>
     </div>

@@ -19,6 +19,7 @@ class Playlist(models.Model):
     playlist_id = models.CharField(max_length=255, primary_key=True, unique=True)
     name = models.CharField(max_length=255)
     track = models.ManyToManyField(Track, related_name="playlists")
+    # last_chart_id = models.CharField(max_length=20, null=True)
 
     class Meta:
         ordering = ["playlist_id"]

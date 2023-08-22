@@ -85,6 +85,7 @@ def download_imgs():
         with open(f"album_art/{fn}.jpg", "wb") as f:
             f.write(res.content)
             res.close()
+            sleep(1)
             count += 1
         if count % 100 == 0:
             print("Sleeping. Count is: ", count)
