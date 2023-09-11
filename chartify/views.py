@@ -84,6 +84,7 @@ def random_chart(request):
         plid = randomPlaylist.playlist_id
         year = plid[:4]
         decade = plid[:3] + "0"
+        print("RANDOM CHART ", plid)
         return JsonResponse((plid, decade, year), safe=False)
 
 
@@ -99,7 +100,7 @@ def show_weeks(request):
 
 def chart_detail(request):
     if request.method == "GET":
-        playlist_id = request.GET["chart_id"]
+        playlist_id = request.GET["chart"]
         try:
             playlist = Playlist.objects.get(pk=playlist_id)
             pl_name = playlist.name

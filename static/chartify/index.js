@@ -6,53 +6,19 @@ var c = function () {
 var chart_data = {}, dump = {};
 var pl_name = '';
 var new_name = '';
-// var chart_id = '';
-// var charts = [];
-// var recent_chart = "19880925";
-// var recent_chart = '';
-// var chart_id = '19880925';
 var plid = '';
 
 window.onload = function () {
-    // c('ChartID on page load: ', chart_id)
-    // if (chart_id) {
-    //     // c('Chart_id exists, pulling THAT chart')
-    //     showRandomChart(chart_id);
-    // }
-    // else {
-    //     // c('Onload getRandomChart()')
-    //     getRandomChart();
-    // }
     showDecades();
     getRandomChart();
-    // recent_chart = getRecentChart();
-
-
 }
 
-// createPL = document.getElementById('createPL');
-createPL.addEventListener('click', editPlaylistName);
-// createPL.addEventListener('click', confirmationModal);
+createPL.addEventListener('click', confirmationModal);
+createPL = document.getElementById('createPL');
 createPL2 = document.getElementById('createPL2');
 createPL2.addEventListener('click', editPlaylistName);
-
 // loginBtn = document.getElementById('loginBtn');
 // loginBtn.addEventListener('click', login);
-
-function getRecentChart() {
-    if (recent_chart !== '') {
-        recent_chart = recent_chart;
-        console.log('Recent chart is NOT empty. recent_chart = ', recent_chart)
-        return recent_chart;
-    }
-    else {
-        // recent_chart = '';
-        // console.log('recent chart is empty. recent =  ', recent_chart)
-        return recent_chart;
-    }
-}
-
-//////////////////////////////////////////////////////////////////////////
 
 function getRandomChart() {
     let plid = '';
@@ -64,9 +30,9 @@ function getRandomChart() {
         dataType: 'json',
         cache: false,
         success: function (data) {
-            plid = data[0];
-            decade = data[1];
-            year = data[2];
+            let plid = data[0];
+            let decade = data[1];
+            let year = data[2];
             showRandomChart(plid, decade, year);
         },
         error: function (response) {
@@ -76,9 +42,9 @@ function getRandomChart() {
 }
 
 function showRandomChart(plid, decade, year) {
+    $('#chooseWeek').val(plid).change()
     $('#chooseDecade').val(decade).change();
     $('#chooseYear').val(year).change();
-    setTimeout(() => { $('#chooseWeek').val(plid).change(); }, 100);
 }
 
 function chartDetail() {
@@ -109,17 +75,6 @@ function chartDetail() {
     });
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-
-function test() {
-    const url = '/test';
-    console.log('Test Redirect()');
-    $.ajax({
-        url: url,
-        type: 'GET',
-    });
-}
-
 function login() {
     const url = '/login';
     console.log('JS LOGIN()');
@@ -129,25 +84,6 @@ function login() {
     });
 }
 
-// save recent_chart then log into Spotify
-// function login2() {
-//     const url = '/save_recent_chart';
-//     c('chartidbefore ajax send: ', chart_id)
-//     $.ajax({
-//         url: url,
-//         type: 'GET',
-//         data: { 'recent_chart': chart_id },
-//         success: function (data) {
-//             c('Ajax data recnt chrt: ', data)
-//             const url = '/login';
-//             console.log('JS LOGIN()');
-//             $.ajax({
-//                 url: url,
-//                 type: 'GET',
-//             });
-//         }
-//     });
-// }
 
 function confirmationModal() {
     var modal = document.getElementById("confirmationModal");
@@ -259,7 +195,7 @@ function deSelectTracks() {
 //dropdowns
 function chooseYear() {
     let year = document.querySelector('#chooseYear').value;
-    // c('chooseYear(). Value of year ', year)
+    c('Hit chooseYear. Year: ', year)
     const url = '/show_weeks';
     $.ajax({
         url: url,
@@ -274,7 +210,6 @@ function chooseYear() {
     value="${data.playlist_id}">${data.name.slice(7,)}</option>`
             });
             $("#chooseWeek").html(html_data).change();
-            // $("#chooseWeek").html(html_data);
         },
         error: function (response) {
             alert("Error getting data")
@@ -285,13 +220,6 @@ function chooseYear() {
 function chooseDecade() {
     let decade = parseInt(document.querySelector('#chooseDecade').value),
         year = document.querySelector('#chooseYear');
-
-    // setTimeout(() => { $('#chooseYear').val(decade).change(); }, 100);
-    // $('#chooseYear').val(decade).change();
-    // chooseYear(decade)
-    // decade = parseInt(decade);
-    // decades = parseInt(decade);
-    // c('chooseDecade(). Decade ', decade)
     year.options.length = 0;
     let yearsArray = new Array();
     for (var i = 0; i < 10; i++) {
@@ -309,21 +237,11 @@ function chooseDecade() {
             year.appendChild(option);
         }
     }
-    // if (decade == 1950) {
-    //     let year = yearsArray[2]
-
-    // }
-    // else {
-    //     let year = yearsArray[0]
-    // }
-
-    // year = yearsArray[0];
-    // setTimeout(() => { $('#chooseYear').val(year).change(); }, 100);
-    // $('#chooseYear').val(decade).change();
+    $('#chooseYear').change()
 }
 
 function showDecades() {
-    let decades = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
+    const decades = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
     // let decade = document.querySelector('#chooseYear').value,
     let decadeSelect = document.querySelector('#chooseDecade');
     for (var i = 0; i < decades.length; i++) {
@@ -332,5 +250,5 @@ function showDecades() {
         option.value = decades[i];
         decadeSelect.appendChild(option);
     }
-    // $('#chooseYear').val(decadeSelect).change();
+
 }
